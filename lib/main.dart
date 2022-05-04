@@ -13,9 +13,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Dream Sanctuary',
       theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.purple[700],
-          foregroundColor: Colors.blueGrey[300],
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color.fromARGB(255, 54, 79, 107),
+          foregroundColor: Color.fromARGB(255, 228, 249, 245),
         ),
       ),
       //home: const DefaultList(),

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_test_app/home.dart';
 
 class LoginUser {
   late String userName;
@@ -24,63 +25,74 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Welcome!')),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 150.0, vertical: 150.0),
-            children: [
-              const Text(
-                'Welcome!',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Username',
-                  labelText: 'Username',
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/background_login.png"),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor:
+              const Color.fromARGB(255, 228, 249, 245).withOpacity(0.7),
+          body: Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 150.0, vertical: 150.0),
+              children: [
+                const Text(
+                  'Dream Sanctuary',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                inputFormatters: [LengthLimitingTextInputFormatter(30)],
-                textInputAction: TextInputAction.next,
-                autofocus: true,
-                validator: (userName) {
-                  if (userName!.isEmpty) {
-                    return 'Username is required';
-                  } else if (userName.length < 3) {
-                    return 'Username is too short';
-                  } else {
-                    return null;
-                  }
-                },
-                onSaved: (userName) {
-                  _formResult.userName = userName!;
-                },
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Password',
-                  labelText: 'Password',
+                TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: '',
+                    labelText: 'Username',
+                  ),
+                  inputFormatters: [LengthLimitingTextInputFormatter(30)],
+                  textInputAction: TextInputAction.next,
+                  autofocus: true,
+                  validator: (userName) {
+                    if (userName!.isEmpty) {
+                      return 'required';
+                    } else if (userName.length < 3) {
+                      return 'too short';
+                    } else {
+                      return null;
+                    }
+                  },
+                  onSaved: (userName) {
+                    _formResult.userName = userName!;
+                  },
                 ),
-                inputFormatters: [LengthLimitingTextInputFormatter(30)],
-                textInputAction: TextInputAction.next,
-                autofocus: true,
-                validator: (password) {
-                  if (password!.isEmpty) {
-                    return 'Password is required';
-                  } else if (password.length < 3) {
-                    return 'Password is too short';
-                  } else {
-                    return null;
-                  }
-                },
-                onSaved: (userName) {
-                  _formResult.userName = userName!;
-                },
-              ),
-            ],
+                TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: '',
+                    labelText: 'Password',
+                  ),
+                  inputFormatters: [LengthLimitingTextInputFormatter(30)],
+                  textInputAction: TextInputAction.next,
+                  autofocus: true,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  validator: (password) {
+                    if (password!.isEmpty) {
+                      return 'required';
+                    } else if (password.length < 3) {
+                      return 'too short';
+                    } else {
+                      return null;
+                    }
+                  },
+                  onSaved: (password) {
+                    _formResult.password = password!;
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -90,6 +102,7 @@ class _LoginState extends State<Login> {
           child: const Icon(
             Icons.check_circle,
             size: 36,
+            // color: Color.fromARGB(255, 54, 79, 107),
           )),
     );
   }
@@ -100,6 +113,15 @@ class _LoginState extends State<Login> {
     if (form.validate()) {
       form.save();
       log('New user logged in!');
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: ((context) {
+            return Home(
+              userName: _formResult.userName,
+            );
+          }),
+        ),
+      );
     }
   }
 }
