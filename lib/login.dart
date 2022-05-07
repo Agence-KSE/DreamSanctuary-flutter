@@ -23,16 +23,13 @@ class _LoginState extends State<Login> {
   final _formResult = LoginUser();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Welcome!')),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/background_login.png"),
-            fit: BoxFit.fill,
-          ),
-        ),
+    return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("images/background_login.png"),
+                fit: BoxFit.cover)),
         child: Scaffold(
+          appBar: AppBar(title: const Text('Welcome!')),
           backgroundColor:
               const Color.fromARGB(255, 228, 249, 245).withOpacity(0.7),
           body: Form(
@@ -94,17 +91,15 @@ class _LoginState extends State<Login> {
               ],
             ),
           ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: _submitForm,
-          tooltip: 'Login',
-          child: const Icon(
-            Icons.check_circle,
-            size: 36,
-            // color: Color.fromARGB(255, 54, 79, 107),
-          )),
-    );
+          floatingActionButton: FloatingActionButton(
+              onPressed: _submitForm,
+              tooltip: 'Login',
+              child: const Icon(
+                Icons.check_circle,
+                size: 36,
+                // color: Color.fromARGB(255, 54, 79, 107),
+              )),
+        ));
   }
 
   void _submitForm() {
