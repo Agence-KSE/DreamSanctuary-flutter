@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:core';
+import 'package:dream_sanctuary/one_message.dart';
 import 'package:flutter/material.dart';
 import 'package:dream_sanctuary/data/Message.dart';
 import 'package:dream_sanctuary/login.dart';
@@ -14,7 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List _messages = <Message>[
+  final List<Message> _messages = [
     Message(
         username: "Toto", timestamp: "Today", message: "Salut branquignole!"),
     Message(
@@ -112,15 +113,16 @@ class _HomeState extends State<Home> {
                 isThreeLine: false,
                 title: GestureDetector(
                   onTap: () {
+                    // un message
                     Navigator.of(context)
-                        .push(MaterialPageRoute<void>(builder: ((context) {
-                      return Scaffold(
-                        appBar: AppBar(
-                          title: Text(message.username),
-                          centerTitle: true,
-                        ),
-                      );
-                    })));
+                        .push(MaterialPageRoute<void>(builder: (context) {
+                      return oneMessage(
+                          // récupération des messages où username = celui qu'on a choisi
+                          messages: _messages
+                              .where((element) =>
+                                  element.username == message.username)
+                              .toList());
+                    }));
                   },
                   child: Row(
                     children: [
