@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_test_app/home.dart';
+import 'package:dream_sanctuary/home.dart';
 
 class LoginUser {
   late String userName;
@@ -29,14 +29,13 @@ class _LoginState extends State<Login> {
                 image: AssetImage("images/background_login.png"),
                 fit: BoxFit.cover)),
         child: Scaffold(
-          appBar: AppBar(title: const Text('Welcome!')),
           backgroundColor:
               const Color.fromARGB(255, 228, 249, 245).withOpacity(0.7),
           body: Form(
             key: _formKey,
             child: ListView(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 150.0, vertical: 150.0),
+                  horizontal: 150.0, vertical: 300.0),
               children: [
                 const Text(
                   'Dream Sanctuary',

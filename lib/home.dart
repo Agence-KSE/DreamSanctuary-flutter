@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:flutter_test_app/data/Message.dart';
-import 'package:flutter_test_app/login.dart';
+import 'package:dream_sanctuary/data/Message.dart';
+import 'package:dream_sanctuary/login.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key, required this.userName}) : super(key: key);

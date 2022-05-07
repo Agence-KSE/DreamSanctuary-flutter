@@ -1,4 +1,4 @@
-package com.example.flutter_test_app
+package com.example.dream_sanctuary
 
 import io.flutter.embedding.android.FlutterActivity
 

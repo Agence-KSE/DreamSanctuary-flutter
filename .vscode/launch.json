@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "flutter_test_app",
+            "name": "dream_sanctuary",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "flutter_test_app (profile mode)",
+            "name": "dream_sanctuary (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "flutter_test_app (release mode)",
+            "name": "dream_sanctuary (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
