@@ -1,9 +1,9 @@
 import 'dart:core';
-import 'package:dream_sanctuary/assets/bottom_bar.dart';
-import 'package:dream_sanctuary/one_message.dart';
-import 'package:dream_sanctuary/profile/profile_drawer.dart';
+import 'package:dreamsanctuary/assets/bottom_bar.dart';
+import 'package:dreamsanctuary/one_message.dart';
+import 'package:dreamsanctuary/profile/profile_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:dream_sanctuary/data/Message.dart';
+import 'package:dreamsanctuary/data/Message.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key, required this.username}) : super(key: key);
@@ -15,6 +15,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  // key to open drawer from bottom_bar
+  final GlobalKey<ScaffoldState> _homeScaffoldKey =
+      new GlobalKey<ScaffoldState>();
+
   final List<Message> _messages = [
     Message(
         username: "Toto", timestamp: "Today", message: "Salut branquignole!"),
@@ -41,6 +45,7 @@ class _HomeState extends State<Home> {
           ],
         ),
         body: Scaffold(
+          key: _homeScaffoldKey,
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
             tooltip: 'New post...',
@@ -49,10 +54,11 @@ class _HomeState extends State<Home> {
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.miniEndFloat,
-          bottomNavigationBar:
-              new DreamSanctuaryBottomBar(context, widget.username)
-                  .createDreamSanctuaryBottomBar(),
-          endDrawer: ProfileDrawer(widget.username).createProfileDrawer(),
+          bottomNavigationBar: new DreamSanctuaryBottomBar(
+                  context, widget.username, _homeScaffoldKey)
+              .createDreamSanctuaryBottomBar(),
+          endDrawer: ProfileDrawer(widget.username, this.context)
+              .createProfileDrawer(),
         ));
   }
 

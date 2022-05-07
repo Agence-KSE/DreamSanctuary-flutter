@@ -1,9 +1,12 @@
+import 'package:dreamsanctuary/login.dart';
 import 'package:flutter/material.dart';
 
 class ProfileDrawer extends Drawer {
-  final _biggerFont = const TextStyle(fontSize: 18, height: 1);
+  final _biggerFont =
+      const TextStyle(fontSize: 18, height: 3, fontWeight: FontWeight.bold);
   final String username;
-  ProfileDrawer(this.username);
+  final BuildContext context;
+  ProfileDrawer(this.username, this.context);
 
   Drawer createProfileDrawer() {
     return Drawer(
@@ -33,10 +36,10 @@ class ProfileDrawer extends Drawer {
               children: [
                 Column(children: [
                   const Icon(Icons.event_note_rounded),
-                  const Text("14.7 K")
+                  const Text("14.7 K posts")
                 ]),
                 const VerticalDivider(
-                  width: 20,
+                  width: 5,
                   thickness: 1,
                   indent: 20,
                   endIndent: 0,
@@ -44,10 +47,10 @@ class ProfileDrawer extends Drawer {
                 ),
                 Column(children: [
                   const Icon(Icons.people_alt_outlined),
-                  const Text("32.8 K")
+                  const Text("32.8 K dreamers")
                 ]),
                 const VerticalDivider(
-                  width: 20,
+                  width: 5,
                   thickness: 1,
                   indent: 20,
                   endIndent: 0,
@@ -55,7 +58,7 @@ class ProfileDrawer extends Drawer {
                 ),
                 Column(children: [
                   const Icon(Icons.attach_money),
-                  const Text("\$ 492 K")
+                  const Text("\$ 492 K/month")
                 ]),
               ]),
         ),
@@ -120,6 +123,10 @@ class ProfileDrawer extends Drawer {
                 child: OutlinedButton(
                     onPressed: () {
                       debugPrint('Received click');
+                      Navigator.of(this.context)
+                          .push(MaterialPageRoute(builder: ((context) {
+                        return Login();
+                      })));
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

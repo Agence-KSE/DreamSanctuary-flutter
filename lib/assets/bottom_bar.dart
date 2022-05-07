@@ -1,15 +1,16 @@
 import 'dart:developer';
 
-import 'package:dream_sanctuary/home.dart';
-import 'package:dream_sanctuary/login.dart';
-import 'package:dream_sanctuary/profile/profile_main.dart';
+import 'package:dreamsanctuary/home.dart';
+import 'package:dreamsanctuary/login.dart';
+import 'package:dreamsanctuary/profile/profile_drawer.dart';
 import 'package:flutter/material.dart';
 
 class DreamSanctuaryBottomBar extends BottomAppBar {
   final BuildContext context;
   final String username;
+  final GlobalKey<ScaffoldState> _homeScaffoldKey;
 
-  DreamSanctuaryBottomBar(this.context, this.username);
+  DreamSanctuaryBottomBar(this.context, this.username, this._homeScaffoldKey);
 
   BottomAppBar createDreamSanctuaryBottomBar() {
     return BottomAppBar(
@@ -37,7 +38,7 @@ class DreamSanctuaryBottomBar extends BottomAppBar {
             IconButton(
               icon: const Icon(Icons.person),
               tooltip: 'Profile',
-              onPressed: _goProfile,
+              onPressed: () => _homeScaffoldKey.currentState!.openEndDrawer(),
             ),
           ],
         ),
@@ -65,11 +66,7 @@ class DreamSanctuaryBottomBar extends BottomAppBar {
 
   void _goSettings() {}
   void _goProfile() {
-    Navigator.of(this.context).push(MaterialPageRoute(builder: (context) {
-      return ProfileMain(
-        username: username,
-        context: context,
-      );
-    }));
+    log("Open profile drawer");
+    ProfileDrawer(username, this.context).createProfileDrawer();
   }
 }

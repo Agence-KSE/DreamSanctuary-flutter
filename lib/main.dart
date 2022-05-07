@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dream_sanctuary/login.dart';
+import 'package:dreamsanctuary/login.dart';
 
 void main() {
   runApp(const MyApp());

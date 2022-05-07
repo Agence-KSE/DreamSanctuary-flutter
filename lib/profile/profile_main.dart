@@ -1,4 +1,4 @@
-import 'package:dream_sanctuary/assets/bottom_bar.dart';
+import 'package:dreamsanctuary/assets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class ProfileMain extends StatefulWidget {
@@ -11,14 +11,18 @@ class ProfileMain extends StatefulWidget {
 }
 
 class ProfileMainState extends State<ProfileMain> {
+  final GlobalKey<ScaffoldState> _mainScaffoldKey =
+      new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _mainScaffoldKey,
       appBar: AppBar(
         title: const Text('Dream Sanctuary'),
       ),
-      bottomNavigationBar: DreamSanctuaryBottomBar(context, widget.username)
-          .createDreamSanctuaryBottomBar(),
+      bottomNavigationBar:
+          DreamSanctuaryBottomBar(context, widget.username, _mainScaffoldKey)
+              .createDreamSanctuaryBottomBar(),
     );
   }
 }

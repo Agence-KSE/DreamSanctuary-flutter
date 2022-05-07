@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dream_sanctuary/data/Message.dart';
+import 'package:dreamsanctuary/data/Message.dart';
 
 class oneMessage extends StatefulWidget {
   final List<Message> messages;
