@@ -10,7 +10,7 @@ class LoginUser {
 }
 
 class Login extends StatefulWidget {
-  bool isLoggedIn = false;
+  final bool isLoggedIn = false;
 
   Login({Key? key}) : super(key: key);
 
@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
     return Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("images/background_login.png"),
+                image: AssetImage("images/background_login.jpg"),
                 fit: BoxFit.cover)),
         child: Scaffold(
           backgroundColor:
@@ -50,6 +50,7 @@ class _LoginState extends State<Login> {
                   inputFormatters: [LengthLimitingTextInputFormatter(30)],
                   textInputAction: TextInputAction.next,
                   autofocus: true,
+                  controller: TextEditingController(text: "testLogin"),
                   validator: (userName) {
                     if (userName!.isEmpty) {
                       return 'required';
@@ -71,6 +72,7 @@ class _LoginState extends State<Login> {
                   inputFormatters: [LengthLimitingTextInputFormatter(30)],
                   textInputAction: TextInputAction.next,
                   autofocus: true,
+                  controller: TextEditingController(text: "testLogin"),
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
@@ -111,7 +113,7 @@ class _LoginState extends State<Login> {
         MaterialPageRoute<void>(
           builder: ((context) {
             return Home(
-              userName: _formResult.userName,
+              username: _formResult.userName,
             );
           }),
         ),

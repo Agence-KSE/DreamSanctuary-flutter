@@ -1,14 +1,14 @@
-import 'dart:developer';
 import 'dart:core';
+import 'package:dream_sanctuary/assets/bottom_bar.dart';
 import 'package:dream_sanctuary/one_message.dart';
+import 'package:dream_sanctuary/profile/profile_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:dream_sanctuary/data/Message.dart';
-import 'package:dream_sanctuary/login.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key, required this.userName}) : super(key: key);
+  const Home({Key? key, required this.username}) : super(key: key);
 
-  final String userName;
+  final String username;
 
   @override
   State<StatefulWidget> createState() => _HomeState();
@@ -28,19 +28,19 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Dream Sanctuary'),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.message_sharp),
-            tooltip: 'Messages',
-            onPressed: _pushMessages,
-          )
-        ],
-      ),
-      body: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text('Dream Sanctuary'),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.message_sharp),
+              tooltip: 'Messages',
+              onPressed: _pushMessages,
+            )
+          ],
+        ),
+        body: Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
             tooltip: 'New post...',
@@ -49,60 +49,12 @@ class _HomeState extends State<Home> {
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.miniEndFloat,
-          bottomNavigationBar: BottomAppBar(
-            child: SizedBox(
-              height: 60.0,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.home),
-                    tooltip: 'Home',
-                    onPressed: _goHome,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    tooltip: 'Search',
-                    onPressed: _goSearch,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.settings),
-                    tooltip: 'Settings',
-                    onPressed: _goSettings,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.person),
-                    tooltip: 'Profile',
-                    onPressed: _goProfile,
-                  ),
-                ],
-              ),
-            ),
-          )),
-    );
+          bottomNavigationBar:
+              new DreamSanctuaryBottomBar(context, widget.username)
+                  .createDreamSanctuaryBottomBar(),
+          endDrawer: ProfileDrawer(widget.username).createProfileDrawer(),
+        ));
   }
-
-/*
-* **** ROUTES NAVIGATOR ****
-*/
-  void _goHome() {
-    Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder:
-        (BuildContext context, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
-      log("changed route to Home");
-      return Home(userName: widget.userName);
-    }));
-  }
-
-  void _goSearch() {
-    Navigator.of(context).push(MaterialPageRoute(builder: ((context) {
-      return Login();
-    })));
-  }
-
-  void _goSettings() {}
-  void _goProfile() {}
 
   void _pushMessages() {
     Navigator.of(context).push(

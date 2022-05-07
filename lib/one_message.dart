@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dream_sanctuary/data/Message.dart';
 
 class oneMessage extends StatefulWidget {
-  List<Message> messages;
+  final List<Message> messages;
 
   oneMessage({Key? key, required this.messages}) : super(key: key);
 
