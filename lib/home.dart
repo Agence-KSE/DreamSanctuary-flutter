@@ -1,9 +1,12 @@
 import 'dart:core';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamsanctuary/assets/bottom_bar.dart';
-import 'package:dreamsanctuary/one_message.dart';
 import 'package:dreamsanctuary/profile/profile_drawer.dart';
+import 'package:dreamsanctuary/providers/chat_page_provider.dart';
+import 'package:dreamsanctuary/screens/chat_page_home.dart';
 import 'package:flutter/material.dart';
 import 'package:dreamsanctuary/data/Message.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key, required this.username}) : super(key: key);
@@ -18,6 +21,8 @@ class _HomeState extends State<Home> {
   // key to open drawer from bottom_bar
   final GlobalKey<ScaffoldState> _homeScaffoldKey =
       new GlobalKey<ScaffoldState>();
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  late ChatPageProvider homeProvider = context.read<ChatPageProvider>();
 
   final List<Message> _messages = [
     Message(
@@ -63,63 +68,8 @@ class _HomeState extends State<Home> {
   }
 
   void _pushMessages() {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) {
-          final tiles = _messages.map((message) {
-            return ListTile(
-                isThreeLine: false,
-                title: GestureDetector(
-                  onTap: () {
-                    // un message
-                    Navigator.of(context)
-                        .push(MaterialPageRoute<void>(builder: (context) {
-                      return oneMessage(
-                          // récupération des messages où username = celui qu'on a choisi
-                          messages: _messages
-                              .where((element) =>
-                                  element.username == message.username)
-                              .toList());
-                    }));
-                  },
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          message.username,
-                          textAlign: TextAlign.left,
-                          style: _biggerFont,
-                        ),
-                      ),
-                      Expanded(
-                          child: Text(
-                        message.timestamp,
-                        textAlign: TextAlign.right,
-                        style: _lowerFont,
-                      )),
-                    ],
-                  ),
-                  /* subtitle: Text(
-                    message.message,
-                    style: _lowerFont,
-                  ),*/
-                ));
-          });
-          final divided = tiles.isNotEmpty
-              ? ListTile.divideTiles(
-                  context: context,
-                  tiles: tiles,
-                ).toList()
-              : <Widget>[];
-
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Messages'),
-            ),
-            body: ListView(children: divided),
-          );
-        },
-      ),
-    );
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: ((context) {
+      return const ChatPageHome();
+    })));
   }
 }

@@ -5,6 +5,7 @@ class User {
   String id = "";
   final String username;
   final String email;
+  String photoUrl = "";
 
   User(this.username, this.email) {
     this.id = uuid.v1();
