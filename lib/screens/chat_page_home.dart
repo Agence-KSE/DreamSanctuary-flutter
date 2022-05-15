@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dreamsanctuary/home.dart';
 import 'package:dreamsanctuary/screens/conversation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:dreamsanctuary/allWidgets/loading_view.dart';
 import 'package:dreamsanctuary/models/chat_user.dart';
 //import 'package:smart_talk/providers/auth_provider.dart';
 import 'package:dreamsanctuary/providers/chat_page_provider.dart';
-import 'package:dreamsanctuary/screens/chat_page_home.dart';
 //import 'package:smart_talk/screens/login_page.dart';
 import 'package:dreamsanctuary/screens/profile_page.dart';
 import 'package:dreamsanctuary/utilities/debouncer.dart';
@@ -47,7 +47,13 @@ class _ChatPageHomeState extends State<ChatPageHome> {
   }
 
   Future<bool> onBackPress() {
-    openDialog();
+    // openDialog();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) => Home(
+                  username: currentUserId,
+                )),
+        (Route<dynamic> route) => false);
     return Future.value(false);
   }
 
@@ -298,7 +304,6 @@ class _ChatPageHomeState extends State<ChatPageHome> {
     final firebaseAuth = FirebaseAuth.instance;
     if (documentSnapshot != null) {
       ChatUser userChat = ChatUser.fromDocument(documentSnapshot);
-      log(documentSnapshot.toString());
       if (userChat.id == currentUserId) {
         return const SizedBox.shrink();
       } else {
@@ -307,6 +312,11 @@ class _ChatPageHomeState extends State<ChatPageHome> {
             if (KeyboardUtils.isKeyboardShowing()) {
               KeyboardUtils.closeKeyboard(context);
             }
+            log(userChat.id);
+            log(userChat.photoUrl);
+            log(userChat.username);
+            var photoURL =
+                "https://a.wattpad.com/useravatar/EdwigeTecherIadFranc.256.581303.jpg";
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -314,7 +324,8 @@ class _ChatPageHomeState extends State<ChatPageHome> {
                           peerId: userChat.id,
                           peerAvatar: userChat.photoUrl,
                           peerNickname: userChat.username,
-                          userAvatar: firebaseAuth.currentUser!.photoURL!,
+                          userAvatar:
+                              photoURL, // firebaseAuth.currentUser!.photoURL!,
                         )));
           },
           child: ListTile(

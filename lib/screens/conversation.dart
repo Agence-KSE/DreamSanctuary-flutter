@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -65,7 +66,8 @@ class _ConversationState extends State<Conversation> {
 
   _scrollListener() {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+        !scrollController.position.outOfRange &&
+        scrollController.hasClients) {
       setState(() {
         _limit += _limitIncrement;
       });
