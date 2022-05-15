@@ -13,4 +13,10 @@ class FirestoreConstants {
   static const content = "content";
   static const type = "type";
   static const email = "email";
+
+  // CONTENT PART
+  static const pathContentCollection = "content";
+  static const contentType = "contentType";
+  static const user = "user";
+  static const uploadTimestamp = "uploadTimestamp";
 }
