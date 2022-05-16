@@ -17,10 +17,28 @@ class Content extends Equatable {
       required this.user,
       required this.uploadTimestamp});
 
+  Content copyWith({
+    String? id,
+    String? contentType,
+    ChatUser? user,
+    String? uploadTimestamp,
+  }) =>
+      Content(
+          id: id ?? this.id,
+          contentType: contentType ?? this.contentType,
+          user: user ?? this.user,
+          uploadTimestamp: uploadTimestamp ?? this.uploadTimestamp);
+
+  Map<String, dynamic> toJson() => {
+        FirestoreConstants.contentType: contentType,
+        FirestoreConstants.user: user,
+        FirestoreConstants.uploadTimestamp: uploadTimestamp
+      };
+
   factory Content.fromDocument(DocumentSnapshot snapshot) {
     String contentType = "";
     ChatUser user = new ChatUser(
-        id: "", photoUrl: "", username: "", phoneNumber: "", aboutMe: "");
+        username: '', aboutMe: '', id: '', phoneNumber: '', photoUrl: '');
     String uploadTimestamp = "";
 
     try {

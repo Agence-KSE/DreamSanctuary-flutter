@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamsanctuary/firebase_options.dart';
 import 'package:dreamsanctuary/providers/chat_page_provider.dart';
 import 'package:dreamsanctuary/providers/chat_provider.dart';
+import 'package:dreamsanctuary/providers/home_page_provider.dart';
 import 'package:dreamsanctuary/providers/profile_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +40,14 @@ class MyApp extends StatelessWidget {
                   firebaseFirestore: firebaseFirestore,
                   firebaseStorage: firebaseStorage)),
           Provider<ChatPageProvider>(
-              create: (_) =>
-                  ChatPageProvider(firebaseFirestore: firebaseFirestore)),
-          Provider<ChatProvider>(
-              create: (_) => ChatProvider(
-                  prefs: prefs,
-                  firebaseStorage: firebaseStorage,
+              create: (_) => ChatPageProvider(
+                  /*prefs: prefs,
+                  firebaseStorage: firebaseStorage,*/
+                  firebaseFirestore: firebaseFirestore)),
+          Provider<HomePageProvider>(
+              create: (_) => HomePageProvider(
+                  /*prefs: prefs,
+                  firebaseStorage: firebaseStorage,*/
                   firebaseFirestore: firebaseFirestore))
         ],
         child: MaterialApp(

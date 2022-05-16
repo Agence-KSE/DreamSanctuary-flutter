@@ -1,4 +1,5 @@
 class FirestoreConstants {
+  // MESSAGING PART
   static const pathUserCollection = "users";
   static const pathMessageCollection = "messages";
   static const username = "username";
