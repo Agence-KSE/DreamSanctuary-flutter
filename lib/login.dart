@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dreamsanctuary/home.dart';
+import 'package:dreamsanctuary/screens/home.dart';
 
 class LoginUser {
   late String userName;

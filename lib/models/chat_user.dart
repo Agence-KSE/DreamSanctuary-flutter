@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 
+@JsonSerializable(explicitToJson: true)
 class ChatUser extends Equatable {
   final String id;
   final String photoUrl;
@@ -73,6 +76,5 @@ class ChatUser extends Equatable {
         aboutMe: aboutMe);
   }
   @override
-  // TODO: implement props
   List<Object?> get props => [id, photoUrl, username, phoneNumber, aboutMe];
 }

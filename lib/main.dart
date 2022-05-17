@@ -44,6 +44,12 @@ class MyApp extends StatelessWidget {
                   /*prefs: prefs,
                   firebaseStorage: firebaseStorage,*/
                   firebaseFirestore: firebaseFirestore)),
+          Provider<ChatProvider>(
+            create: (_) => ChatProvider(
+                prefs: prefs,
+                firebaseStorage: firebaseStorage,
+                firebaseFirestore: firebaseFirestore),
+          ),
           Provider<HomePageProvider>(
               create: (_) => HomePageProvider(
                   /*prefs: prefs,

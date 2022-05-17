@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dreamsanctuary/home.dart';
+import 'package:dreamsanctuary/screens/home.dart';
 import 'package:dreamsanctuary/screens/conversation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

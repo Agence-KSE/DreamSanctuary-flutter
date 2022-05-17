@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
-import 'package:dreamsanctuary/models/chat_messages.dart';
+import 'package:dreamsanctuary/models/chat_message.dart';
 
 class ChatProvider {
   final SharedPreferences prefs;
@@ -47,7 +47,7 @@ class ChatProvider {
         .doc(groupChatId)
         .collection(groupChatId)
         .doc(DateTime.now().millisecondsSinceEpoch.toString());
-    ChatMessages chatMessages = ChatMessages(
+    ChatMessage chatMessages = ChatMessage(
         idFrom: currentUserId,
         idTo: peerId,
         timestamp: DateTime.now().millisecondsSinceEpoch.toString(),

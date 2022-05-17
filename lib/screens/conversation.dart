@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
 import 'package:dreamsanctuary/allWidgets/common_widgets.dart';
-import 'package:dreamsanctuary/models/chat_messages.dart';
+import 'package:dreamsanctuary/models/chat_message.dart';
 //import 'package:smart_talk/providers/auth_provider.dart';
 import 'package:dreamsanctuary/providers/chat_provider.dart';
 import 'package:dreamsanctuary/providers/profile_provider.dart';
@@ -286,7 +286,7 @@ class _ConversationState extends State<Conversation> {
 
   Widget buildItem(int index, DocumentSnapshot? documentSnapshot) {
     if (documentSnapshot != null) {
-      ChatMessages chatMessages = ChatMessages.fromDocument(documentSnapshot);
+      ChatMessage chatMessages = ChatMessage.fromDocument(documentSnapshot);
       if (chatMessages.idFrom == currentUserId) {
         // right side (my message)
         return Column(
