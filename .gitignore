@@ -26,3 +26,9 @@ android/*
 ios/*
 web/*
 windows/*
+linux/*
+macos/*
+
+# dependencies
+.flutter-plugins
+.flutter-plugins-dependencies
