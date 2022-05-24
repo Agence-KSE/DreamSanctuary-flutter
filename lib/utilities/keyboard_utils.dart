@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class KeyboardUtils {
   static bool isKeyboardShowing() {
     if (WidgetsBinding.instance != null) {
-      return WidgetsBinding.instance!.window.viewInsets.bottom > 0;
+      return WidgetsBinding.instance.window.viewInsets.bottom > 0;
     } else {
       return false;
     }

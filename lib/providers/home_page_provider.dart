@@ -20,6 +20,7 @@ class HomePageProvider {
       return firebaseFirestore
           .collection(collectionPath)
           .limit(limit)
+          .orderBy("uploadTimestamp")
           .where(FirestoreConstants.username, isEqualTo: textSearch)
           .snapshots();
     } else {

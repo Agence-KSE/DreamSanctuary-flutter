@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -77,4 +79,29 @@ class ChatUser extends Equatable {
   }
   @override
   List<Object?> get props => [id, photoUrl, username, phoneNumber, aboutMe];
+
+  static ChatUser getFromId(String id) {
+    ChatUser loading = ChatUser(
+        id: '',
+        photoUrl: '',
+        username: 'loading',
+        phoneNumber: '',
+        aboutMe: '');
+
+    FirebaseFirestore.instance
+        .collection('users')
+        // get only username, not collection name (ex : users/admin)
+        .doc(id.split('/')[1])
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        print('Document data: ${documentSnapshot.data()}');
+        return ChatUser.fromDocument(documentSnapshot);
+      } else {
+        print('Document does not exist on the database');
+        return loading;
+      }
+    });
+    return loading;
+  }
 }

@@ -1,4 +1,4 @@
-import 'package:dreamsanctuary/assets/bottom_bar.dart';
+import 'package:dreamsanctuary/allWidgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class ProfileMain extends StatefulWidget {

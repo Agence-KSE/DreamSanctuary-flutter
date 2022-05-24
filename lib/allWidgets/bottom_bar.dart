@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dreamsanctuary/screens/home.dart';
-import 'package:dreamsanctuary/login.dart';
+import 'package:dreamsanctuary/screens/login.dart';
 import 'package:dreamsanctuary/profile/profile_drawer.dart';
 import 'package:flutter/material.dart';
 

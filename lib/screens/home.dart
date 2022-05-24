@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dreamsanctuary/models/chat_user.dart';
-import 'package:dreamsanctuary/models/content.dart';
+import 'package:dreamsanctuary/models/content/content.dart';
 import 'package:dreamsanctuary/providers/home_page_provider.dart';
 import 'package:dreamsanctuary/screens/chat_page_home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +12,6 @@ import 'package:dreamsanctuary/allWidgets/loading_view.dart';
 //import 'package:smart_talk/providers/auth_provider.dart';
 //import 'package:smart_talk/screens/login_page.dart';
 import 'package:dreamsanctuary/utilities/debouncer.dart';
-import 'package:dreamsanctuary/utilities/keyboard_utils.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key, required String username}) : super(key: key);
@@ -26,6 +23,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final ScrollController scrollController = ScrollController();
+
+  // content documentReference firestore
+  DocumentReference contentRef =
+      FirebaseFirestore.instance.collection("content").doc();
 
   int _limit = 20;
   final int _limitIncrement = 20;
@@ -230,15 +231,17 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildItem(BuildContext context, DocumentSnapshot? documentSnapshot) {
-    final firebaseAuth = FirebaseAuth.instance;
     if (documentSnapshot != null) {
-      log(documentSnapshot.toString());
       Content content = Content.fromDocument(documentSnapshot);
-      log((documentSnapshot.get("user").toString()));
-      //ChatUser creator = content.user;
-      // log("creator : " + creator.username);
-      log("content : " + content.contentType);
-      return TextButton(
+      return content.buildContent();
+
+      /*return ListView.builder(
+          itemBuilder: ((context, index) {
+            return Text("coucou");
+          }),
+          shrinkWrap: true);
+*/
+      /*return TextButton(
         onPressed: () {
           if (KeyboardUtils.isKeyboardShowing()) {
             KeyboardUtils.closeKeyboard(context);
@@ -256,13 +259,10 @@ class _HomeState extends State<Home> {
           //                   photoURL, // firebaseAuth.currentUser!.photoURL!,
           //             )));
         },
-        child: ListTile(
-          title: Text(
-            "creator.username",
-            style: const TextStyle(color: Colors.black),
-          ),
-        ),
-      );
+        child: ListView.builder(itemBuilder: (context, index) {
+          return Text("coucou");
+        }),
+      );*/
     } else {
       return const SizedBox.shrink();
     }

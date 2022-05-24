@@ -6,7 +6,7 @@ import 'package:dreamsanctuary/providers/home_page_provider.dart';
 import 'package:dreamsanctuary/providers/profile_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:dreamsanctuary/login.dart';
+import 'package:dreamsanctuary/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
