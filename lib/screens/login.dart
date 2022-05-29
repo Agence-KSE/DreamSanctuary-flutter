@@ -26,18 +26,14 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("images/background_login.jpg"),
-                fit: BoxFit.cover)),
+        decoration:
+            BoxDecoration(image: DecorationImage(image: AssetImage("images/background_login.jpg"), fit: BoxFit.cover)),
         child: Scaffold(
-            backgroundColor:
-                const Color.fromARGB(255, 228, 249, 245).withOpacity(0.7),
+            backgroundColor: const Color.fromARGB(255, 228, 249, 245).withOpacity(0.7),
             body: Form(
               key: _formKey,
               child: ListView(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 150.0, vertical: 300.0),
+                padding: const EdgeInsets.symmetric(horizontal: 150.0, vertical: 300.0),
                 children: [
                   const Text(
                     'Dream Sanctuary',
@@ -91,31 +87,21 @@ class _LoginState extends State<Login> {
                       _formResult.password = password!;
                     },
                   ),
+                  ElevatedButton(
+                    onPressed: _submitForm,
+                    child: Text("Login"),
+                  )
                 ],
               ),
             ),
-            floatingActionButton: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                FloatingActionButton(
-                    onPressed: _gotoRegister,
-                    tooltip: 'Register',
-                    child: const Icon(
-                      Icons.add,
-                      size: 36,
-                      // color: Color.fromARGB(255, 54, 79, 107),
-                    )),
-                FloatingActionButton(
-                    onPressed: _submitForm,
-                    tooltip: 'Login',
-                    child: const Icon(
-                      Icons.check_circle,
-                      size: 36,
-                      // color: Color.fromARGB(255, 54, 79, 107),
-                    )),
-              ],
-            )));
+            floatingActionButton: FloatingActionButton(
+                onPressed: _gotoRegister,
+                tooltip: 'Register',
+                child: const Icon(
+                  Icons.add,
+                  size: 36,
+                  color: Color.fromARGB(255, 54, 79, 107),
+                ))));
   }
 
   void _submitForm() {
