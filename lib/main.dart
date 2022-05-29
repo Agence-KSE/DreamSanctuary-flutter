@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamsanctuary/firebase_options.dart';
+import 'package:dreamsanctuary/providers/auth_provider.dart';
 import 'package:dreamsanctuary/providers/chat_page_provider.dart';
 import 'package:dreamsanctuary/providers/chat_provider.dart';
 import 'package:dreamsanctuary/providers/home_page_provider.dart';
 import 'package:dreamsanctuary/providers/profile_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:dreamsanctuary/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,25 +39,19 @@ class MyApp extends StatelessWidget {
         providers: [
           Provider<ProfileProvider>(
               create: (_) => ProfileProvider(
-                  prefs: prefs,
-                  firebaseFirestore: firebaseFirestore,
-                  firebaseStorage: firebaseStorage)),
-          Provider<ChatPageProvider>(
-              create: (_) => ChatPageProvider(
-                  /*prefs: prefs,
-                  firebaseStorage: firebaseStorage,*/
-                  firebaseFirestore: firebaseFirestore)),
+                  prefs: prefs, firebaseFirestore: firebaseFirestore, firebaseStorage: firebaseStorage)),
+          Provider<ChatPageProvider>(create: (_) => ChatPageProvider(firebaseFirestore: firebaseFirestore)),
           Provider<ChatProvider>(
-            create: (_) => ChatProvider(
-                prefs: prefs,
-                firebaseStorage: firebaseStorage,
-                firebaseFirestore: firebaseFirestore),
+            create: (_) =>
+                ChatProvider(prefs: prefs, firebaseStorage: firebaseStorage, firebaseFirestore: firebaseFirestore),
           ),
-          Provider<HomePageProvider>(
-              create: (_) => HomePageProvider(
-                  /*prefs: prefs,
-                  firebaseStorage: firebaseStorage,*/
-                  firebaseFirestore: firebaseFirestore))
+          Provider<HomePageProvider>(create: (_) => HomePageProvider(firebaseFirestore: firebaseFirestore)),
+          ChangeNotifierProvider<AuthProvider>(
+              create: (_) => AuthProvider(
+                  firebaseFirestore: firebaseFirestore,
+                  prefs: prefs,
+                  googleSignIn: GoogleSignIn(),
+                  firebaseAuth: FirebaseAuth.instance)),
         ],
         child: MaterialApp(
           title: 'Dream Sanctuary',

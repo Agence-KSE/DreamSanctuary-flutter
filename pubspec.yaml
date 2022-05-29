@@ -90,7 +90,9 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets: 
-      - images/background_login.jpg
+    - images/
+    - images/google_login.jpg
+    - images/background_login.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
