@@ -35,7 +35,7 @@ class _RegisterEmailState extends State<_RegisterEmail> {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               alignment: Alignment.center,
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {}
                 },
@@ -44,11 +44,8 @@ class _RegisterEmailState extends State<_RegisterEmail> {
             ),
             Container(
               alignment: Alignment.center,
-              child: Text(_success == null
-                  ? ''
-                  : (_success
-                      ? 'Successfully registered ' + _userEmail
-                      : 'Registration failed')),
+              child: Text(
+                  _success == null ? '' : (_success ? 'Successfully registered ' + _userEmail : 'Registration failed')),
             )
           ],
         ),
