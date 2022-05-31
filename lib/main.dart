@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamsanctuary/firebase_options.dart';
-import 'package:dreamsanctuary/providers/auth_provider.dart';
 import 'package:dreamsanctuary/providers/chat_page_provider.dart';
 import 'package:dreamsanctuary/providers/chat_provider.dart';
 import 'package:dreamsanctuary/providers/home_page_provider.dart';
 import 'package:dreamsanctuary/providers/profile_provider.dart';
+import 'package:dreamsanctuary/screens/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +24,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  FirebaseAuth.instance.userChanges().listen((User? user) {
+    if (user == null) {
+      print('User is currently signed out!');
+    } else {
+      print('User is signed in!');
+    }
+  });
+
   runApp(MyApp(prefs: prefs));
 }
 
@@ -46,12 +55,6 @@ class MyApp extends StatelessWidget {
                 ChatProvider(prefs: prefs, firebaseStorage: firebaseStorage, firebaseFirestore: firebaseFirestore),
           ),
           Provider<HomePageProvider>(create: (_) => HomePageProvider(firebaseFirestore: firebaseFirestore)),
-          ChangeNotifierProvider<AuthProvider>(
-              create: (_) => AuthProvider(
-                  firebaseFirestore: firebaseFirestore,
-                  prefs: prefs,
-                  googleSignIn: GoogleSignIn(),
-                  firebaseAuth: FirebaseAuth.instance)),
         ],
         child: MaterialApp(
           title: 'Dream Sanctuary',
@@ -62,7 +65,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
           //home: const DefaultList(),
-          home: Login(),
+          home: Register(),
         ));
   }
 }

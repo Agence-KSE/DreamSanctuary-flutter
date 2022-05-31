@@ -1,12 +1,13 @@
 import 'dart:developer';
 
 import 'package:dreamsanctuary/screens/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dreamsanctuary/screens/home.dart';
 
 class LoginUser {
-  late String userName;
+  late String email;
   late String password;
 }
 
@@ -43,23 +44,25 @@ class _LoginState extends State<Login> {
                   TextFormField(
                     decoration: const InputDecoration(
                       hintText: '',
-                      labelText: 'Username',
+                      labelText: 'Email',
                     ),
                     inputFormatters: [LengthLimitingTextInputFormatter(30)],
                     textInputAction: TextInputAction.next,
                     autofocus: true,
-                    controller: TextEditingController(text: "testLogin"),
-                    validator: (userName) {
-                      if (userName!.isEmpty) {
+                    controller: TextEditingController(text: "test@ds.com"),
+                    validator: (email) {
+                      if (email!.isEmpty) {
                         return 'required';
-                      } else if (userName.length < 3) {
+                      } else if (email.length < 5) {
                         return 'too short';
+                      } else if (!email.toString().contains("@")) {
+                        return 'isn\'t an email address';
                       } else {
                         return null;
                       }
                     },
-                    onSaved: (userName) {
-                      _formResult.userName = userName!;
+                    onSaved: (email) {
+                      _formResult.email = email!;
                     },
                   ),
                   TextFormField(
@@ -70,7 +73,7 @@ class _LoginState extends State<Login> {
                     inputFormatters: [LengthLimitingTextInputFormatter(30)],
                     textInputAction: TextInputAction.next,
                     autofocus: true,
-                    controller: TextEditingController(text: "testLogin"),
+                    controller: TextEditingController(text: "testds"),
                     obscureText: true,
                     enableSuggestions: false,
                     autocorrect: false,
@@ -104,17 +107,29 @@ class _LoginState extends State<Login> {
                 ))));
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
+    UserCredential userCredential;
     log("submit form");
     final FormState form = _formKey.currentState as FormState;
     if (form.validate()) {
       form.save();
+      try {
+        print('try login ' + _formResult.email + ' : ' + _formResult.password);
+        userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: _formResult.email, password: _formResult.password);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user. ' + e.message.toString());
+        }
+      }
       log('New user logged in!');
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: ((context) {
             return Home(
-              username: _formResult.userName,
+              username: '',
             );
           }),
         ),
