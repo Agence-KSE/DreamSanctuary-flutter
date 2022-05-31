@@ -12,6 +12,7 @@ import 'package:dreamsanctuary/allWidgets/loading_view.dart';
 //import 'package:smart_talk/providers/auth_provider.dart';
 //import 'package:smart_talk/screens/login_page.dart';
 import 'package:dreamsanctuary/utilities/debouncer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key, required String username}) : super(key: key);
@@ -25,8 +26,7 @@ class _HomeState extends State<Home> {
   final ScrollController scrollController = ScrollController();
 
   // content documentReference firestore
-  DocumentReference contentRef =
-      FirebaseFirestore.instance.collection("content").doc();
+  DocumentReference contentRef = FirebaseFirestore.instance.collection("content").doc();
 
   int _limit = 20;
   final int _limitIncrement = 20;
@@ -41,8 +41,7 @@ class _HomeState extends State<Home> {
   TextEditingController searchTextEditingController = TextEditingController();
 
   void scrollListener() {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       setState(() {
         _limit += _limitIncrement;
       });
@@ -117,24 +116,17 @@ class _HomeState extends State<Home> {
                   Expanded(
                     child: StreamBuilder<QuerySnapshot>(
                       stream: homePageProvider.getFirestoreData(
-                          FirestoreConstants.pathContentCollection,
-                          _limit,
-                          _textSearch),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                          FirestoreConstants.pathContentCollection, _limit, _textSearch),
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasData) {
-                          log("length : " +
-                              snapshot.data!.docs.length.toString());
+                          log("length : " + snapshot.data!.docs.length.toString());
                           if (snapshot.data!.docs.length > 0) {
                             return ListView.separated(
                               shrinkWrap: true,
                               itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) => buildItem(
-                                  context, snapshot.data?.docs[index]),
+                              itemBuilder: (context, index) => buildItem(context, snapshot.data?.docs[index]),
                               controller: scrollController,
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      const Divider(),
+                              separatorBuilder: (BuildContext context, int index) => const Divider(),
                             );
                           } else {
                             return const Center(
@@ -152,8 +144,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
               Positioned(
-                child:
-                    isLoading ? const LoadingView() : const SizedBox.shrink(),
+                child: isLoading ? const LoadingView() : const SizedBox.shrink(),
               ),
             ],
           ),
