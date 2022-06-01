@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamsanctuary/models/content/content.dart';
 import 'package:dreamsanctuary/providers/home_page_provider.dart';
 import 'package:dreamsanctuary/screens/chat_page_home.dart';
+import 'package:dreamsanctuary/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -76,6 +77,7 @@ class _HomeState extends State<Home> {
       title: const Text('Dream Sanctuary'),
       centerTitle: true,
       actions: [
+        IconButton(onPressed: _signOut, icon: const Icon(Icons.login_outlined)),
         IconButton(
           icon: const Icon(Icons.message_sharp),
           tooltip: 'Messages',
@@ -100,6 +102,14 @@ class _HomeState extends State<Home> {
                 )),
         (Route<dynamic> route) => false);
     return Future.value(false);
+  }
+
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance
+        .signOut()
+        .then((value) => Navigator.of(context).push(MaterialPageRoute<void>(builder: (context) {
+              return Login();
+            })));
   }
 
   @override
