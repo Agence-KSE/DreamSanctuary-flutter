@@ -32,6 +32,7 @@ windows/*
 linux/*
 macos/*
 
-# dependencies
+# Generated files
 .flutter-plugins
 .flutter-plugins-dependencies
+.generated_plugin_registrant.dart
