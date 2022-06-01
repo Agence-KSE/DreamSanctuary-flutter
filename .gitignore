@@ -36,3 +36,4 @@ macos/*
 .flutter-plugins
 .flutter-plugins-dependencies
 .generated_plugin_registrant.dart
+lib/generated_plugin_registrant.dart
