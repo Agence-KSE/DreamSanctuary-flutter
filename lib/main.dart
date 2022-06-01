@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
           //home: const DefaultList(),
-          home: Register(),
+          home: Login(),
         ));
   }
 }

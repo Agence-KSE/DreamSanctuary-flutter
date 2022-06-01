@@ -1,10 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class FormUser {
-  String username;
-  String password;
-  String email;
+class FormRegisterUser {
+  late String username;
+  late String password;
+  late String email;
 }
 
 class Register extends StatefulWidget {
@@ -13,8 +14,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final GlobalKey _formKey = GlobalKey();
-  final Register _formResult = FormUser();
+  final GlobalKey _formKeyRegister = GlobalKey();
+  final FormRegisterUser _formResult = FormRegisterUser();
+  late String tempPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class _RegisterState extends State<Register> {
         child: Scaffold(
             backgroundColor: const Color.fromARGB(255, 228, 249, 245).withOpacity(0.7),
             body: Form(
-              key: _formKey,
+              key: _formKeyRegister,
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 150.0, vertical: 300.0),
                 children: [
@@ -75,6 +77,7 @@ class _RegisterState extends State<Register> {
                       } else if (password.length < 3) {
                         return 'too short';
                       } else {
+                        tempPassword = password;
                         return null;
                       }
                     },
@@ -82,20 +85,56 @@ class _RegisterState extends State<Register> {
                       _formResult.password = password!;
                     },
                   ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: '',
+                      labelText: 'Repeat password',
+                    ),
+                    inputFormatters: [LengthLimitingTextInputFormatter(30)],
+                    textInputAction: TextInputAction.next,
+                    autofocus: true,
+                    controller: TextEditingController(text: "testds"),
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    validator: (password) {
+                      print("temp : " + tempPassword);
+                      if (password != tempPassword) {
+                        return 'passwords are not identical';
+                      }
+                      return null;
+                    },
+                    onSaved: (password) {
+                      _formResult.password = password!;
+                    },
+                  ),
                   ElevatedButton(
-                    onPressed: () => {},
-                    child: Text("Login"),
+                    onPressed: _submitForm,
+                    child: Text("Register"),
                   )
                 ],
               ),
-            ),
-            floatingActionButton: FloatingActionButton(
-                onPressed: () => {},
-                tooltip: 'Register',
-                child: const Icon(
-                  Icons.add,
-                  size: 36,
-                  color: Color.fromARGB(255, 54, 79, 107),
-                ))));
+            )));
+  }
+
+  Future<void> _submitForm() async {
+    UserCredential userCredential;
+    final FormState form = _formKeyRegister.currentState as FormState;
+    print("registering user...");
+    print("test");
+    if (form.validate()) {
+      // form.save();
+      try {
+        print('try login ' + _formResult.email + ' : ' + _formResult.password);
+        userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: _formResult.email, password: _formResult.password);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user. ' + e.message.toString());
+        }
+      }
+    }
   }
 }
