@@ -23,6 +23,9 @@ doc/api/
 # Compile
 .idea/*
 android/*
+!android/build.gradle
+!android/gradle.properties
+!android/app/build.gradle
 ios/*
 web/*
 windows/*
