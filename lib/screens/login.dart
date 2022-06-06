@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dreamsanctuary/screens/home.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginUser {
   late String email;
@@ -14,7 +15,7 @@ class LoginUser {
 class Login extends StatefulWidget {
   final bool isLoggedIn = false;
 
-  Login({Key? key}) : super(key: key);
+  Login({Key? key, bool? isNewUser}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _LoginState();
@@ -26,6 +27,10 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isLoggedIn) {
+      print("register");
+      Fluttertoast.showToast(msg: 'You have been registered!', backgroundColor: Colors.pink);
+    }
     return Container(
         decoration:
             BoxDecoration(image: DecorationImage(image: AssetImage("images/background_login.jpg"), fit: BoxFit.cover)),
@@ -125,16 +130,20 @@ class _LoginState extends State<Login> {
         }
       }
       log('New user logged in!');
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: ((context) {
-            return Home(
-              username: '',
-            );
-          }),
-        ),
-      );
+      _gotoHome();
     }
+  }
+
+  void _gotoHome() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: ((context) {
+          return Home(
+            username: '',
+          );
+        }),
+      ),
+    );
   }
 
   void _gotoRegister() {
