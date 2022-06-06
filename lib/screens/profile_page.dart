@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
 import 'package:dreamsanctuary/allConstants/app_constants.dart';
 import 'package:dreamsanctuary/allWidgets/loading_view.dart';
-import 'package:dreamsanctuary/models/chat_user.dart';
+import 'package:dreamsanctuary/models/user.dart';
 import 'package:dreamsanctuary/providers/profile_provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -30,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String photoUrl = '';
   String phoneNumber = '';
   String aboutMe = '';
+  String email = '';
 
   bool isLoading = false;
   File? avatarImageFile;
@@ -50,8 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
       displayName = profileProvider.getPrefs(FirestoreConstants.username) ?? "";
 
       photoUrl = profileProvider.getPrefs(FirestoreConstants.photoUrl) ?? "";
-      phoneNumber =
-          profileProvider.getPrefs(FirestoreConstants.phoneNumber) ?? "";
+      phoneNumber = profileProvider.getPrefs(FirestoreConstants.phoneNumber) ?? "";
       aboutMe = profileProvider.getPrefs(FirestoreConstants.aboutMe) ?? "";
     });
     displayNameController = TextEditingController(text: displayName);
@@ -62,9 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
     ImagePicker imagePicker = ImagePicker();
     // PickedFile is not supported
     // Now use XFile?
-    XFile? pickedFile = await imagePicker
-        .pickImage(source: ImageSource.gallery)
-        .catchError((onError) {
+    XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.gallery).catchError((onError) {
       Fluttertoast.showToast(msg: onError.toString());
     });
     File? image;
@@ -82,20 +80,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future uploadFile() async {
     String fileName = id;
-    UploadTask uploadTask =
-        profileProvider.uploadImageFile(avatarImageFile!, fileName);
+    UploadTask uploadTask = profileProvider.uploadImageFile(avatarImageFile!, fileName);
     try {
       TaskSnapshot snapshot = await uploadTask;
       photoUrl = await snapshot.ref.getDownloadURL();
-      ChatUser updateInfo = ChatUser(
-          id: id,
-          photoUrl: photoUrl,
-          username: displayName,
-          phoneNumber: phoneNumber,
-          aboutMe: aboutMe);
+      DSUser updateInfo = DSUser(
+          id: id, photoUrl: photoUrl, username: displayName, phoneNumber: phoneNumber, aboutMe: aboutMe, email: email);
       profileProvider
-          .updateFirestoreData(
-              FirestoreConstants.pathUserCollection, id, updateInfo.toJson())
+          .updateFirestoreData(FirestoreConstants.pathUserCollection, id, updateInfo.toJson())
           .then((value) async {
         await profileProvider.setPrefs(FirestoreConstants.photoUrl, photoUrl);
         setState(() {
@@ -118,19 +110,13 @@ class _ProfilePageState extends State<ProfilePage> {
         phoneNumber = dialCodeDigits + _phoneController.text.toString();
       }
     });
-    ChatUser updateInfo = ChatUser(
-        id: id,
-        photoUrl: photoUrl,
-        username: displayName,
-        phoneNumber: phoneNumber,
-        aboutMe: aboutMe);
+    DSUser updateInfo = DSUser(
+        id: id, photoUrl: photoUrl, username: displayName, phoneNumber: phoneNumber, aboutMe: aboutMe, email: email);
     profileProvider
-        .updateFirestoreData(
-            FirestoreConstants.pathUserCollection, id, updateInfo.toJson())
+        .updateFirestoreData(FirestoreConstants.pathUserCollection, id, updateInfo.toJson())
         .then((value) async {
       await profileProvider.setPrefs(FirestoreConstants.username, displayName);
-      await profileProvider.setPrefs(
-          FirestoreConstants.phoneNumber, phoneNumber);
+      await profileProvider.setPrefs(FirestoreConstants.phoneNumber, phoneNumber);
       await profileProvider.setPrefs(
         FirestoreConstants.photoUrl,
         photoUrl,
@@ -182,9 +168,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       color: AppColors.greyColor,
                                     );
                                   },
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
+                                  loadingBuilder:
+                                      (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                                     if (loadingProgress == null) {
                                       return child;
                                     }
@@ -194,13 +179,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                       child: Center(
                                         child: CircularProgressIndicator(
                                           color: Colors.grey,
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded /
+                                                  loadingProgress.expectedTotalBytes!
                                               : null,
                                         ),
                                       ),
@@ -237,8 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     TextField(
-                      decoration: kTextInputDecoration.copyWith(
-                          hintText: 'Write your Name'),
+                      decoration: kTextInputDecoration.copyWith(hintText: 'Write your Name'),
                       controller: displayNameController,
                       onChanged: (value) {
                         displayName = value;
@@ -249,13 +229,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     const Text(
                       'About Me...',
                       style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.spaceCadet),
+                          fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: AppColors.spaceCadet),
                     ),
                     TextField(
-                      decoration: kTextInputDecoration.copyWith(
-                          hintText: 'Write about yourself...'),
+                      decoration: kTextInputDecoration.copyWith(hintText: 'Write about yourself...'),
                       onChanged: (value) {
                         aboutMe = value;
                       },
@@ -323,8 +300,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          Positioned(
-              child: isLoading ? const LoadingView() : const SizedBox.shrink()),
+          Positioned(child: isLoading ? const LoadingView() : const SizedBox.shrink()),
         ],
       ),
     );

@@ -1,6 +1,8 @@
+import 'package:dreamsanctuary/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class FormRegisterUser {
   late String username;
@@ -21,8 +23,8 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration:
-            BoxDecoration(image: DecorationImage(image: AssetImage("images/background_login.jpg"), fit: BoxFit.cover)),
+        decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage("images/background_register.jpg"), fit: BoxFit.cover)),
         child: Scaffold(
             backgroundColor: const Color.fromARGB(255, 228, 249, 245).withOpacity(0.7),
             body: Form(
@@ -86,28 +88,23 @@ class _RegisterState extends State<Register> {
                     },
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: '',
-                      labelText: 'Repeat password',
-                    ),
-                    inputFormatters: [LengthLimitingTextInputFormatter(30)],
-                    textInputAction: TextInputAction.next,
-                    autofocus: true,
-                    controller: TextEditingController(text: "testds"),
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    validator: (password) {
-                      print("temp : " + tempPassword);
-                      if (password != tempPassword) {
-                        return 'passwords are not identical';
-                      }
-                      return null;
-                    },
-                    onSaved: (password) {
-                      _formResult.password = password!;
-                    },
-                  ),
+                      decoration: const InputDecoration(
+                        hintText: '',
+                        labelText: 'Repeat password',
+                      ),
+                      inputFormatters: [LengthLimitingTextInputFormatter(30)],
+                      textInputAction: TextInputAction.next,
+                      autofocus: true,
+                      controller: TextEditingController(text: "testds"),
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      validator: (password) {
+                        if (password != tempPassword) {
+                          return 'passwords are not identical';
+                        }
+                        return null;
+                      }),
                   ElevatedButton(
                     onPressed: _submitForm,
                     child: Text("Register"),
@@ -118,23 +115,36 @@ class _RegisterState extends State<Register> {
   }
 
   Future<void> _submitForm() async {
-    UserCredential userCredential;
     final FormState form = _formKeyRegister.currentState as FormState;
-    print("registering user...");
-    print("test");
     if (form.validate()) {
-      // form.save();
+      form.save();
       try {
-        print('try login ' + _formResult.email + ' : ' + _formResult.password);
-        userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: _formResult.email, password: _formResult.password);
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: _formResult.email, password: _formResult.password);
+
+        gotoLogin(true);
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user. ' + e.message.toString());
+        if (e.code == 'weak-password') {
+          String error = 'The password provided is too weak.';
+          print(error);
+          Fluttertoast.showToast(msg: error, backgroundColor: Colors.red);
+        } else if (e.code == 'email-already-in-use') {
+          String error = 'This email is already registered.';
+          print(error);
+          Fluttertoast.showToast(
+              msg: error, backgroundColor: Color.fromARGB(255, 170, 125, 121), textColor: Colors.red);
         }
       }
     }
+  }
+
+  void gotoLogin(bool newUser) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: ((context) {
+          return Login(isNewUser: true);
+        }),
+      ),
+    );
   }
 }

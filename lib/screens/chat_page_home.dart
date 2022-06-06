@@ -10,7 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
 import 'package:dreamsanctuary/allWidgets/loading_view.dart';
-import 'package:dreamsanctuary/models/chat_user.dart';
+import 'package:dreamsanctuary/models/user.dart';
 //import 'package:smart_talk/providers/auth_provider.dart';
 import 'package:dreamsanctuary/providers/chat_page_provider.dart';
 //import 'package:smart_talk/screens/login_page.dart';
@@ -85,8 +85,7 @@ class _ChatPageHomeState extends State<ChatPageHome> {
               const Text(
                 'Are you sure?',
                 textAlign: TextAlign.center,
-                style:
-                    TextStyle(color: AppColors.white, fontSize: Sizes.dimen_16),
+                style: TextStyle(color: AppColors.white, fontSize: Sizes.dimen_16),
               ),
               vertical15,
               Row(
@@ -130,8 +129,7 @@ class _ChatPageHomeState extends State<ChatPageHome> {
   }
 
   void scrollListener() {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       setState(() {
         _limit += _limitIncrement;
       });
@@ -163,22 +161,14 @@ class _ChatPageHomeState extends State<ChatPageHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            title: const Text('Dream Sanctuary Chat'),
-            actions: [
-              IconButton(
-                  onPressed: () => googleSignOut(),
-                  icon: const Icon(Icons.logout)),
-              IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ProfilePage()));
-                  },
-                  icon: const Icon(Icons.person)),
-            ]),
+        appBar: AppBar(centerTitle: true, title: const Text('Dream Sanctuary Chat'), actions: [
+          IconButton(onPressed: () => googleSignOut(), icon: const Icon(Icons.logout)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+              },
+              icon: const Icon(Icons.person)),
+        ]),
         body: WillPopScope(
           onWillPop: onBackPress,
           child: Stack(
@@ -188,23 +178,17 @@ class _ChatPageHomeState extends State<ChatPageHome> {
                   buildSearchBar(),
                   Expanded(
                     child: StreamBuilder<QuerySnapshot>(
-                      stream: chatPageProvider.getFirestoreData(
-                          FirestoreConstants.pathUserCollection,
-                          _limit,
-                          _textSearch),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                      stream:
+                          chatPageProvider.getFirestoreData(FirestoreConstants.pathUserCollection, _limit, _textSearch),
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasData) {
                           if ((snapshot.data?.docs.length ?? 0) > 0) {
                             return ListView.separated(
                               shrinkWrap: true,
                               itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) => buildItem(
-                                  context, snapshot.data?.docs[index]),
+                              itemBuilder: (context, index) => buildItem(context, snapshot.data?.docs[index]),
                               controller: scrollController,
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      const Divider(),
+                              separatorBuilder: (BuildContext context, int index) => const Divider(),
                             );
                           } else {
                             return const Center(
@@ -222,8 +206,7 @@ class _ChatPageHomeState extends State<ChatPageHome> {
                 ],
               ),
               Positioned(
-                child:
-                    isLoading ? const LoadingView() : const SizedBox.shrink(),
+                child: isLoading ? const LoadingView() : const SizedBox.shrink(),
               ),
             ],
           ),
@@ -303,7 +286,7 @@ class _ChatPageHomeState extends State<ChatPageHome> {
   Widget buildItem(BuildContext context, DocumentSnapshot? documentSnapshot) {
     final firebaseAuth = FirebaseAuth.instance;
     if (documentSnapshot != null) {
-      ChatUser userChat = ChatUser.fromDocument(documentSnapshot);
+      DSUser userChat = DSUser.fromDocument(documentSnapshot);
       if (userChat.id == currentUserId) {
         return const SizedBox.shrink();
       } else {
@@ -315,8 +298,7 @@ class _ChatPageHomeState extends State<ChatPageHome> {
             log(userChat.id);
             log(userChat.photoUrl);
             log(userChat.username);
-            var photoURL =
-                "https://a.wattpad.com/useravatar/EdwigeTecherIadFranc.256.581303.jpg";
+            var photoURL = "https://a.wattpad.com/useravatar/EdwigeTecherIadFranc.256.581303.jpg";
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -324,8 +306,7 @@ class _ChatPageHomeState extends State<ChatPageHome> {
                           peerId: userChat.id,
                           peerAvatar: userChat.photoUrl,
                           peerNickname: userChat.username,
-                          userAvatar:
-                              photoURL, // firebaseAuth.currentUser!.photoURL!,
+                          userAvatar: photoURL, // firebaseAuth.currentUser!.photoURL!,
                         )));
           },
           child: ListTile(
@@ -337,8 +318,7 @@ class _ChatPageHomeState extends State<ChatPageHome> {
                       fit: BoxFit.cover,
                       width: 50,
                       height: 50,
-                      loadingBuilder: (BuildContext ctx, Widget child,
-                          ImageChunkEvent? loadingProgress) {
+                      loadingBuilder: (BuildContext ctx, Widget child, ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) {
                           return child;
                         } else {
@@ -347,10 +327,8 @@ class _ChatPageHomeState extends State<ChatPageHome> {
                             height: 50,
                             child: CircularProgressIndicator(
                                 color: Colors.grey,
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                                     : null),
                           );
                         }

@@ -3,48 +3,42 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:cloud_firestore_odm/cloud_firestore_odm.dart';
 
 @JsonSerializable(explicitToJson: true)
-class ChatUser extends Equatable {
+class DSUser extends Equatable {
   final String id;
-  final String photoUrl;
+  final String email;
   final String username;
-  final String phoneNumber;
   final String aboutMe;
+  final String photoUrl;
+  final String phoneNumber;
 
   String toString() {
-    return this.id +
-        " - " +
-        this.photoUrl +
-        " - " +
-        this.username +
-        " - " +
-        this.phoneNumber +
-        " - " +
-        this.aboutMe;
+    return this.id + " - " + this.photoUrl + " - " + this.username + " - " + this.phoneNumber + " - " + this.aboutMe;
   }
 
-  const ChatUser(
+  const DSUser(
       {required this.id,
-      required this.photoUrl,
+      required this.email,
       required this.username,
+      required this.photoUrl,
       required this.phoneNumber,
       required this.aboutMe});
 
-  ChatUser copyWith({
+  DSUser copyWith({
     String? id,
     String? photoUrl,
     String? nickname,
     String? phoneNumber,
     String? email,
   }) =>
-      ChatUser(
+      DSUser(
           id: id ?? this.id,
           photoUrl: photoUrl ?? this.photoUrl,
           username: nickname ?? username,
           phoneNumber: phoneNumber ?? this.phoneNumber,
-          aboutMe: email ?? aboutMe);
+          aboutMe: email ?? aboutMe,
+          email: email ?? this.email);
 
   Map<String, dynamic> toJson() => {
         FirestoreConstants.username: username,
@@ -52,49 +46,47 @@ class ChatUser extends Equatable {
         FirestoreConstants.phoneNumber: phoneNumber,
         FirestoreConstants.aboutMe: aboutMe,
       };
-  factory ChatUser.fromDocument(DocumentSnapshot snapshot) {
+  factory DSUser.fromDocument(DocumentSnapshot snapshot) {
     String photoUrl = "";
     String nickname = "";
     String phoneNumber = "";
     String aboutMe = "";
+    String email = "";
 
     try {
       photoUrl = snapshot.get(FirestoreConstants.photoUrl);
       nickname = snapshot.get(FirestoreConstants.username);
       phoneNumber = snapshot.get(FirestoreConstants.phoneNumber);
       aboutMe = snapshot.get(FirestoreConstants.aboutMe);
+      email = snapshot.get(FirestoreConstants.email);
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
     }
-    return ChatUser(
+    return DSUser(
         id: snapshot.id,
         photoUrl: photoUrl,
         username: nickname,
         phoneNumber: phoneNumber,
-        aboutMe: aboutMe);
+        aboutMe: aboutMe,
+        email: email);
   }
   @override
   List<Object?> get props => [id, photoUrl, username, phoneNumber, aboutMe];
 
-  static ChatUser getFromId(String id) {
-    ChatUser loading = ChatUser(
-        id: '',
-        photoUrl: '',
-        username: 'loading',
-        phoneNumber: '',
-        aboutMe: '');
+  static DSUser getFromId(String id) {
+    DSUser loading = DSUser(id: '', photoUrl: '', username: 'loading', phoneNumber: '', aboutMe: '', email: '');
 
     FirebaseFirestore.instance
-        .collection('users')
-        // get only username, not collection name (ex : users/admin)
+        .collection('DSUsers')
+        // get only username, not collection name (ex : DSUsers/admin)
         .doc(id.split('/')[1])
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         print('Document data: ${documentSnapshot.data()}');
-        return ChatUser.fromDocument(documentSnapshot);
+        return DSUser.fromDocument(documentSnapshot);
       } else {
         print('Document does not exist on the database');
         return loading;

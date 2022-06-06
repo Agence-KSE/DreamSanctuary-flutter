@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_odm/annotation.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
-import 'package:dreamsanctuary/models/chat_user.dart';
+import 'package:dreamsanctuary/models/user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +34,7 @@ class Content extends Equatable {
     // LIKE - FAV
     return Container(
       child: Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
           child: InkWell(
             onTap: () => print("bye bye!"),
             child: Column(
@@ -90,8 +89,8 @@ class Content extends Equatable {
     );
   }
 
-  static Future<ChatUser> getUser(String userPath) async {
-    return await ChatUser.getFromId(userPath);
+  static Future<DSUser> getUser(String userPath) async {
+    return await DSUser.getFromId(userPath);
   }
 
   factory Content.fromDocument(DocumentSnapshot snapshot) {
@@ -100,7 +99,7 @@ class Content extends Equatable {
     String uploadTimestamp = "";
     String url = "";
 
-    ChatUser usr;
+    DSUser usr;
 
     try {
       contentType = snapshot.get(FirestoreConstants.contentType);
@@ -112,12 +111,7 @@ class Content extends Equatable {
         print(e);
       }
     }
-    return Content(
-        id: snapshot.id,
-        contentType: contentType,
-        user: user,
-        uploadTimestamp: uploadTimestamp,
-        url: url);
+    return Content(id: snapshot.id, contentType: contentType, user: user, uploadTimestamp: uploadTimestamp, url: url);
   }
 
   Content copyWith({
@@ -144,11 +138,6 @@ class Content extends Equatable {
 
   @override
   String toString() {
-    return "id : " +
-        this.id +
-        " contentType : " +
-        this.contentType +
-        " uploadTimestamp : " +
-        this.uploadTimestamp;
+    return "id : " + this.id + " contentType : " + this.contentType + " uploadTimestamp : " + this.uploadTimestamp;
   }
 }
