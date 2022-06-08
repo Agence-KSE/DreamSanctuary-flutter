@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dreamsanctuary/models/dsuser.dart';
 import 'package:dreamsanctuary/screens/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +115,7 @@ class _LoginState extends State<Login> {
 
   Future<void> _submitForm() async {
     UserCredential userCredential;
+    DSUser connectedUser;
     log("submit form");
     final FormState form = _formKey.currentState as FormState;
     if (form.validate()) {
@@ -122,6 +124,9 @@ class _LoginState extends State<Login> {
         print('try login ' + _formResult.email + ' : ' + _formResult.password);
         userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: _formResult.email, password: _formResult.password);
+        connectedUser = DSUser.FromUser(userCredential.user!);
+        log('New user logged in!');
+        _gotoHome(user: connectedUser);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print('No user found for that email.');
@@ -129,17 +134,15 @@ class _LoginState extends State<Login> {
           print('Wrong password provided for that user. ' + e.message.toString());
         }
       }
-      log('New user logged in!');
-      _gotoHome();
     }
   }
 
-  void _gotoHome() {
+  void _gotoHome({required user}) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: ((context) {
           return Home(
-            username: '',
+            user: user,
           );
         }),
       ),

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
 import 'package:dreamsanctuary/allConstants/app_constants.dart';
 import 'package:dreamsanctuary/allWidgets/loading_view.dart';
-import 'package:dreamsanctuary/models/user.dart';
+import 'package:dreamsanctuary/models/dsuser.dart';
 import 'package:dreamsanctuary/providers/profile_provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -84,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       TaskSnapshot snapshot = await uploadTask;
       photoUrl = await snapshot.ref.getDownloadURL();
-      DSUser updateInfo = DSUser(
+      DSUser updateInfo = DSUser.DSUserComplete(
           id: id, photoUrl: photoUrl, username: displayName, phoneNumber: phoneNumber, aboutMe: aboutMe, email: email);
       profileProvider
           .updateFirestoreData(FirestoreConstants.pathUserCollection, id, updateInfo.toJson())
@@ -110,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
         phoneNumber = dialCodeDigits + _phoneController.text.toString();
       }
     });
-    DSUser updateInfo = DSUser(
+    DSUser updateInfo = DSUser.DSUserComplete(
         id: id, photoUrl: photoUrl, username: displayName, phoneNumber: phoneNumber, aboutMe: aboutMe, email: email);
     profileProvider
         .updateFirestoreData(FirestoreConstants.pathUserCollection, id, updateInfo.toJson())

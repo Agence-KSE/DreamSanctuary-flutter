@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamsanctuary/models/content/content.dart';
+import 'package:dreamsanctuary/models/dsuser.dart';
+import 'package:dreamsanctuary/profile/profile_drawer.dart';
 import 'package:dreamsanctuary/providers/home_page_provider.dart';
 import 'package:dreamsanctuary/screens/chat_page_home.dart';
 import 'package:dreamsanctuary/screens/login.dart';
@@ -17,7 +19,10 @@ import 'package:dreamsanctuary/utilities/debouncer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key, required String username}) : super(key: key);
+  final DSUser currentUser;
+  const Home({Key? key, required DSUser user})
+      : this.currentUser = user,
+        super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -35,7 +40,6 @@ class _HomeState extends State<Home> {
   String _textSearch = "";
   bool isLoading = false;
 
-  String currentUserId = "admin";
   late HomePageProvider homePageProvider;
 
   Debouncer searchDebouncer = Debouncer(milliseconds: 300);

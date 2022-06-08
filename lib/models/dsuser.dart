@@ -1,29 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable(explicitToJson: true)
 class DSUser extends Equatable {
-  final String id;
-  final String email;
-  final String username;
-  final String aboutMe;
-  final String photoUrl;
-  final String phoneNumber;
+  late String id;
+  late String email;
+  late String username;
+  late String aboutMe;
+  late String photoUrl;
+  late String phoneNumber;
 
   String toString() {
     return this.id + " - " + this.photoUrl + " - " + this.username + " - " + this.phoneNumber + " - " + this.aboutMe;
   }
 
-  const DSUser(
+  // default constructor
+  DSUser({required this.id});
+
+  // complete constructor
+  DSUser.DSUserComplete(
       {required this.id,
       required this.email,
       required this.username,
       required this.photoUrl,
       required this.phoneNumber,
       required this.aboutMe});
+
+  // constructor from an already existing DSUser
+  DSUser.FromDSUser(DSUser user) {
+    this.id = user.id;
+    this.email = user.email;
+    this.username = user.username;
+    this.photoUrl = user.photoUrl;
+    this.phoneNumber = user.phoneNumber;
+    this.aboutMe = user.aboutMe;
+  }
+
+  DSUser.FromUser(User user) {
+    this.id = user.uid;
+    this.email = '';
+    this.username = '';
+    this.photoUrl = '';
+    this.phoneNumber = '';
+    this.aboutMe = '';
+  }
 
   DSUser copyWith({
     String? id,
@@ -32,7 +56,7 @@ class DSUser extends Equatable {
     String? phoneNumber,
     String? email,
   }) =>
-      DSUser(
+      DSUser.DSUserComplete(
           id: id ?? this.id,
           photoUrl: photoUrl ?? this.photoUrl,
           username: nickname ?? username,
@@ -64,7 +88,7 @@ class DSUser extends Equatable {
         print(e);
       }
     }
-    return DSUser(
+    return DSUser.DSUserComplete(
         id: snapshot.id,
         photoUrl: photoUrl,
         username: nickname,
@@ -76,7 +100,8 @@ class DSUser extends Equatable {
   List<Object?> get props => [id, photoUrl, username, phoneNumber, aboutMe];
 
   static DSUser getFromId(String id) {
-    DSUser loading = DSUser(id: '', photoUrl: '', username: 'loading', phoneNumber: '', aboutMe: '', email: '');
+    DSUser loading =
+        DSUser.DSUserComplete(id: '', photoUrl: '', username: 'loading', phoneNumber: '', aboutMe: '', email: '');
 
     FirebaseFirestore.instance
         .collection('DSUsers')

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dreamsanctuary/models/dsuser.dart';
 import 'package:dreamsanctuary/screens/home.dart';
 import 'package:dreamsanctuary/screens/login.dart';
 import 'package:dreamsanctuary/profile/profile_drawer.dart';
@@ -7,10 +8,10 @@ import 'package:flutter/material.dart';
 
 class DreamSanctuaryBottomBar extends BottomAppBar {
   final BuildContext context;
-  final String username;
+  final DSUser user;
   final GlobalKey<ScaffoldState> _homeScaffoldKey;
 
-  DreamSanctuaryBottomBar(this.context, this.username, this._homeScaffoldKey);
+  DreamSanctuaryBottomBar(this.context, this.user, this._homeScaffoldKey);
 
   BottomAppBar createDreamSanctuaryBottomBar() {
     return BottomAppBar(
@@ -50,11 +51,10 @@ class DreamSanctuaryBottomBar extends BottomAppBar {
 * **** ROUTES NAVIGATOR ****
 */
   void _goHome() {
-    Navigator.of(this.context).pushReplacement(PageRouteBuilder(pageBuilder:
-        (BuildContext context, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
+    Navigator.of(this.context).pushReplacement(PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
       log("changed route to Home");
-      return Home(username: this.username);
+      return Home(user: this.user);
     }));
   }
 
@@ -67,6 +67,6 @@ class DreamSanctuaryBottomBar extends BottomAppBar {
   void _goSettings() {}
   void _goProfile() {
     log("Open profile drawer");
-    ProfileDrawer(username, this.context).createProfileDrawer();
+    ProfileDrawer(user, this.context).createProfileDrawer();
   }
 }

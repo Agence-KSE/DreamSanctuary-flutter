@@ -1,19 +1,19 @@
+import 'package:dreamsanctuary/models/dsuser.dart';
 import 'package:dreamsanctuary/screens/login.dart';
 import 'package:flutter/material.dart';
 
 class ProfileDrawer extends Drawer {
-  final _biggerFont =
-      const TextStyle(fontSize: 18, height: 3, fontWeight: FontWeight.bold);
-  final String username;
+  final _biggerFont = const TextStyle(fontSize: 18, height: 3, fontWeight: FontWeight.bold);
+  final DSUser user;
   final BuildContext context;
-  ProfileDrawer(this.username, this.context);
+  ProfileDrawer(this.user, this.context);
 
   Drawer createProfileDrawer() {
     return Drawer(
         child: Column(
       children: [
         Text(
-          username,
+          this.user.username,
           style: _biggerFont,
         ),
         Container(
@@ -21,46 +21,32 @@ class ProfileDrawer extends Drawer {
           height: 150,
           margin: const EdgeInsets.only(bottom: 20.0, top: 20.0),
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("images/background_login.jpg"),
-                  fit: BoxFit.cover),
+              image: DecorationImage(image: AssetImage("images/background_login.jpg"), fit: BoxFit.cover),
               color: Colors.blue,
               border: Border.all(color: Colors.black, width: 1),
               borderRadius: BorderRadius.all(Radius.circular(100))),
         ),
         // row chiffres
         IntrinsicHeight(
-          child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(children: [
-                  const Icon(Icons.event_note_rounded),
-                  const Text("14.7 K posts")
-                ]),
-                const VerticalDivider(
-                  width: 5,
-                  thickness: 1,
-                  indent: 20,
-                  endIndent: 0,
-                  color: Colors.black,
-                ),
-                Column(children: [
-                  const Icon(Icons.people_alt_outlined),
-                  const Text("32.8 K dreamers")
-                ]),
-                const VerticalDivider(
-                  width: 5,
-                  thickness: 1,
-                  indent: 20,
-                  endIndent: 0,
-                  color: Colors.black,
-                ),
-                Column(children: [
-                  const Icon(Icons.attach_money),
-                  const Text("\$ 492 K/month")
-                ]),
-              ]),
+          child: Row(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Column(children: [const Icon(Icons.event_note_rounded), const Text("14.7 K posts")]),
+            const VerticalDivider(
+              width: 5,
+              thickness: 1,
+              indent: 20,
+              endIndent: 0,
+              color: Colors.black,
+            ),
+            Column(children: [const Icon(Icons.people_alt_outlined), const Text("32.8 K dreamers")]),
+            const VerticalDivider(
+              width: 5,
+              thickness: 1,
+              indent: 20,
+              endIndent: 0,
+              color: Colors.black,
+            ),
+            Column(children: [const Icon(Icons.attach_money), const Text("\$ 492 K/month")]),
+          ]),
         ),
         // buttons
         Column(
@@ -75,10 +61,7 @@ class ProfileDrawer extends Drawer {
                   },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.home_rounded),
-                        const Text(" My Sanctuary")
-                      ]),
+                      children: [const Icon(Icons.home_rounded), const Text(" My Sanctuary")]),
                 ),
               ),
             ),
@@ -92,10 +75,7 @@ class ProfileDrawer extends Drawer {
                   },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.people_alt_outlined),
-                        const Text(" My Dreamers")
-                      ]),
+                      children: [const Icon(Icons.people_alt_outlined), const Text(" My Dreamers")]),
                 ),
               ),
             ),
@@ -109,10 +89,7 @@ class ProfileDrawer extends Drawer {
                   },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.settings),
-                        const Text(" Settings")
-                      ]),
+                      children: [const Icon(Icons.settings), const Text(" Settings")]),
                 ),
               ),
             ),
@@ -123,17 +100,13 @@ class ProfileDrawer extends Drawer {
                 child: OutlinedButton(
                     onPressed: () {
                       debugPrint('Received click');
-                      Navigator.of(this.context)
-                          .push(MaterialPageRoute(builder: ((context) {
+                      Navigator.of(this.context).push(MaterialPageRoute(builder: ((context) {
                         return Login();
                       })));
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.logout),
-                          const Text(" Log out")
-                        ])),
+                        children: [const Icon(Icons.logout), const Text(" Log out")])),
               ),
             ),
           ],

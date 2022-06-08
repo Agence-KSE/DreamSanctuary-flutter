@@ -10,7 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
 import 'package:dreamsanctuary/allWidgets/loading_view.dart';
-import 'package:dreamsanctuary/models/user.dart';
+import 'package:dreamsanctuary/models/dsuser.dart';
 //import 'package:smart_talk/providers/auth_provider.dart';
 import 'package:dreamsanctuary/providers/chat_page_provider.dart';
 //import 'package:smart_talk/screens/login_page.dart';
@@ -51,7 +51,7 @@ class _ChatPageHomeState extends State<ChatPageHome> {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             builder: (context) => Home(
-                  username: currentUserId,
+                  user: new DSUser(id: currentUserId),
                 )),
         (Route<dynamic> route) => false);
     return Future.value(false);

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_odm/annotation.dart';
 import 'package:dreamsanctuary/allConstants/all_constants.dart';
-import 'package:dreamsanctuary/models/user.dart';
+import 'package:dreamsanctuary/models/dsuser.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
