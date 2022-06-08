@@ -80,49 +80,32 @@ class _HomeState extends State<Home> {
     return AppBar(
       automaticallyImplyLeading: false,
       title: const Text('Dream Sanctuary'),
-      centerTitle: true,
+      centerTitle: false,
+      leading: GestureDetector(
+        onTap: () => _signOut(),
+        child: const Icon(Icons.login_outlined),
+      ),
       actions: [
-        IconButton(onPressed: _signOut, icon: const Icon(Icons.login_outlined)),
         IconButton(
           icon: const Icon(Icons.message_sharp),
           tooltip: 'Messages',
           onPressed: () => _pushMessages(this.context),
-        )
+        ),
+        IconButton(icon: const Icon(Icons.person), tooltip: 'Profile', onPressed: () => {})
       ],
     );
-  }
-
-  void _pushMessages(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute<void>(builder: ((context) {
-      return const ChatPageHome();
-    })));
-  }
-
-  Future<bool> onBackPress() {
-    // openDialog();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => Home(
-                  username: currentUserId,
-                )),
-        (Route<dynamic> route) => false);
-    return Future.value(false);
-  }
-
-  Future<void> _signOut() async {
-    await FirebaseAuth.instance
-        .signOut()
-        .then((value) => Navigator.of(context).push(MaterialPageRoute<void>(builder: (context) {
-              return Login();
-            })));
   }
 
   @override
   Widget build(BuildContext context) {
     print("login");
+    ProfileDrawer pfd = new ProfileDrawer(widget.currentUser, context);
+
     Fluttertoast.showToast(msg: 'Welcome back!', backgroundColor: Colors.pink);
     return Scaffold(
-        drawer: Drawer(),
+        drawer: Drawer(
+          child: pfd.createProfileDrawer(),
+        ),
         appBar: buildAppBar(),
         body: WillPopScope(
           onWillPop: onBackPress,
@@ -167,6 +150,31 @@ class _HomeState extends State<Home> {
             ],
           ),
         ));
+  }
+
+  void _pushMessages(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: ((context) {
+      return const ChatPageHome();
+    })));
+  }
+
+  Future<bool> onBackPress() {
+    // openDialog();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) => Home(
+                  user: new DSUser.FromDSUser(widget.currentUser),
+                )),
+        (Route<dynamic> route) => false);
+    return Future.value(false);
+  }
+
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance
+        .signOut()
+        .then((value) => Navigator.of(context).push(MaterialPageRoute<void>(builder: (context) {
+              return Login();
+            })));
   }
 
   Widget buildSearchBar() {
