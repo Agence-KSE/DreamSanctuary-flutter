@@ -42,10 +42,10 @@ class DSUser extends Equatable {
 
   DSUser.FromUser(User user) {
     this.id = user.uid;
-    this.email = '';
-    this.username = '';
-    this.photoUrl = '';
-    this.phoneNumber = '';
+    this.email = user.email ?? '';
+    this.username = user.displayName ?? '';
+    this.photoUrl = user.photoURL ?? '';
+    this.phoneNumber = user.phoneNumber ?? '';
     this.aboutMe = '';
   }
 

@@ -124,6 +124,8 @@ class _LoginState extends State<Login> {
         print('try login ' + _formResult.email + ' : ' + _formResult.password);
         userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: _formResult.email, password: _formResult.password);
+        User usr = userCredential.user!;
+        print(usr.uid);
         connectedUser = DSUser.FromUser(userCredential.user!);
         log('New user logged in!');
         _gotoHome(user: connectedUser);

@@ -31,6 +31,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final ScrollController scrollController = ScrollController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  bool isInitialized = false;
 
   // content documentReference firestore
   DocumentReference contentRef = FirebaseFirestore.instance.collection("content").doc();
@@ -41,6 +44,7 @@ class _HomeState extends State<Home> {
   bool isLoading = false;
 
   late HomePageProvider homePageProvider;
+  late ProfileDrawer pfd;
 
   Debouncer searchDebouncer = Debouncer(milliseconds: 300);
   StreamController<bool> buttonClearController = StreamController<bool>();
@@ -65,6 +69,9 @@ class _HomeState extends State<Home> {
     super.initState();
     // authProvider = context.read<AuthProvider>();
     homePageProvider = context.read<HomePageProvider>();
+
+    // profile drawer
+    pfd = new ProfileDrawer(widget.currentUser, context);
     // if (authProvider.getFirebaseUserId()?.isNotEmpty == true) {
     //   currentUserId = authProvider.getFirebaseUserId()!;
     // } else {
@@ -91,19 +98,25 @@ class _HomeState extends State<Home> {
           tooltip: 'Messages',
           onPressed: () => _pushMessages(this.context),
         ),
-        IconButton(icon: const Icon(Icons.person), tooltip: 'Profile', onPressed: () => {})
+        IconButton(
+            icon: const Icon(Icons.person),
+            tooltip: 'Profile',
+            onPressed: () => _scaffoldKey.currentState!.openEndDrawer())
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    print("login");
-    ProfileDrawer pfd = new ProfileDrawer(widget.currentUser, context);
+    if (!isInitialized) {
+      print("login");
+      Fluttertoast.showToast(msg: 'Welcome back!', backgroundColor: Colors.pink, timeInSecForIosWeb: 3);
+      isInitialized = true;
+    }
 
-    Fluttertoast.showToast(msg: 'Welcome back!', backgroundColor: Colors.pink);
     return Scaffold(
-        drawer: Drawer(
+        key: _scaffoldKey,
+        endDrawer: Drawer(
           child: pfd.createProfileDrawer(),
         ),
         appBar: buildAppBar(),
@@ -120,7 +133,6 @@ class _HomeState extends State<Home> {
                           FirestoreConstants.pathContentCollection, _limit, _textSearch),
                       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasData) {
-                          log("length : " + snapshot.data!.docs.length.toString());
                           if (snapshot.data!.docs.length > 0) {
                             return ListView.separated(
                               shrinkWrap: true,
@@ -249,37 +261,13 @@ class _HomeState extends State<Home> {
 
   Widget buildItem(BuildContext context, DocumentSnapshot? documentSnapshot) {
     if (documentSnapshot != null) {
+      print(" ---------- BUILDING CONTENT... ----------");
       Content content = Content.fromDocument(documentSnapshot);
-      return content.buildContent();
+      print("users 0 : " + content.users[0]);
+      print("current user : " + widget.currentUser.username);
 
-      /*return ListView.builder(
-          itemBuilder: ((context, index) {
-            return Text("coucou");
-          }),
-          shrinkWrap: true);
-*/
-      /*return TextButton(
-        onPressed: () {
-          if (KeyboardUtils.isKeyboardShowing()) {
-            KeyboardUtils.closeKeyboard(context);
-          }
-          log("id : " + content.id);
-          // GO TO PUBLICATION
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => Conversation(
-          //               peerId: userChat.id,
-          //               peerAvatar: userChat.photoUrl,
-          //               peerNickname: userChat.username,
-          //               userAvatar:
-          //                   photoURL, // firebaseAuth.currentUser!.photoURL!,
-          //             )));
-        },
-        child: ListView.builder(itemBuilder: (context, index) {
-          return Text("coucou");
-        }),
-      );*/
+      // if user not found in authorized users, let's blur that shit
+      return content.buildContent(this.context, widget.currentUser, !content.users.contains(widget.currentUser.id));
     } else {
       return const SizedBox.shrink();
     }

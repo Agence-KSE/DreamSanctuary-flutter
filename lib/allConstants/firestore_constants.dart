@@ -19,9 +19,9 @@ class FirestoreConstants {
   static const pathContentCollection = "content";
   static const contentType = "contentType";
   static const user = "user";
+  static const users = "users";
   static const uploadTimestamp = "uploadTimestamp";
   static const url = "url";
   static const contentBucket =
       "https://console.firebase.google.com/project/dream-sanctuary-42daf/storage/dream-sanctuary-42daf.appspot.com/files"; // content bucket
-
 }
