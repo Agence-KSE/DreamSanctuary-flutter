@@ -34,10 +34,6 @@ class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   bool isInitialized = false;
-
-  // content documentReference firestore
-  DocumentReference contentRef = FirebaseFirestore.instance.collection("content").doc();
-
   int _limit = 20;
   final int _limitIncrement = 20;
   String _textSearch = "";
@@ -86,7 +82,7 @@ class _HomeState extends State<Home> {
   PreferredSizeWidget buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: const Text('Dream Sanctuary'),
+      title: Text('Welcome to Dream Sanctuary, ' + widget.currentUser.username + "!"),
       centerTitle: false,
       leading: GestureDetector(
         onTap: () => _signOut(),
@@ -259,15 +255,17 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildItem(BuildContext context, DocumentSnapshot? documentSnapshot) {
+  Future<Widget> buildItem(BuildContext context, DocumentSnapshot? documentSnapshot) async {
     if (documentSnapshot != null) {
       print(" ---------- BUILDING CONTENT... ----------");
       Content content = Content.fromDocument(documentSnapshot);
-      print("users 0 : " + content.users[0]);
+      print("current item : " + content.id);
+      print("users 0 : " + content.users.length.toString());
       print("current user : " + widget.currentUser.username);
 
       // if user not found in authorized users, let's blur that shit
-      return content.buildContent(this.context, widget.currentUser, !content.users.contains(widget.currentUser.id));
+      Widget wid = await content.buildContent(this.context, !content.users.contains(widget.currentUser.id));
+      return wid;
     } else {
       return const SizedBox.shrink();
     }

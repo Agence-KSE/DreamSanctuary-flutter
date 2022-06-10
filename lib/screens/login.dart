@@ -124,10 +124,12 @@ class _LoginState extends State<Login> {
         print('try login ' + _formResult.email + ' : ' + _formResult.password);
         userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: _formResult.email, password: _formResult.password);
-        User usr = userCredential.user!;
-        print(usr.uid);
-        connectedUser = DSUser.FromUser(userCredential.user!);
+        print("uid " + userCredential.user!.uid);
+        connectedUser = await DSUser.getFromUserReference(userCredential.user!.uid);
+
         log('New user logged in!');
+        print("username : ");
+        print(connectedUser.toString());
         _gotoHome(user: connectedUser);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {

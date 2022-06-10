@@ -15,7 +15,7 @@ class Content extends Equatable {
   late final String contentType;
   late final String uploadTimestamp;
   late final String url;
-  late final String user;
+  late final String userid;
   late final List<dynamic> users;
 
   Content(
@@ -23,13 +23,13 @@ class Content extends Equatable {
       required String contentType,
       required String uploadTimestamp,
       required String url,
-      required String user,
+      required String userid,
       required List<dynamic> users}) {
     this.id = id;
     this.contentType = contentType;
     this.uploadTimestamp = uploadTimestamp;
     this.url = url;
-    this.user = user;
+    this.userid = userid;
     this.users = users;
   }
 
@@ -41,8 +41,7 @@ class Content extends Equatable {
 
   void _goToCreatorProfile(BuildContext context, Content content) async {
     // get creator from content
-    print("get from : " + content.user);
-    DSUser creator = await DSUser.getFromUserReference(content.user);
+    DSUser creator = await DSUser.getFromUserReference(content.userid);
     print("creator : " + creator.username);
 
     Navigator.of(context).push(MaterialPageRoute<void>(builder: ((context) {
@@ -50,7 +49,9 @@ class Content extends Equatable {
     })));
   }
 
-  Widget buildContent(BuildContext context, DSUser currentUser, bool blur) {
+  Future<Widget> buildContent(BuildContext context, bool blur) async {
+    DSUser author = await DSUser.getFromUserReference(this.userid);
+    // TODO solution ici ? https://stackoverflow.com/questions/28238161/how-to-make-an-asynchronous-dart-call-synchronous
     // AVATAR - NAME
     // IMAGE
     // LIKE - FAV
@@ -98,7 +99,8 @@ class Content extends Equatable {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(this.user.split('/')[1]),
+                        Text(author.username),
+                        //Text(this.user.split('/')[1]),
                         Text(this.uploadTimestamp),
                       ],
                     ),
@@ -115,16 +117,16 @@ class Content extends Equatable {
 
   factory Content.fromDocument(DocumentSnapshot snapshot) {
     String contentType = "";
-    String user = "";
     String uploadTimestamp = "";
     String url = "";
+    String userid = "";
     List<dynamic> users = [];
 
     try {
       contentType = snapshot.get(FirestoreConstants.contentType);
       uploadTimestamp = snapshot.get(FirestoreConstants.uploadTimestamp);
       url = snapshot.get(FirestoreConstants.url);
-      user = snapshot.get(FirestoreConstants.user).path;
+      userid = snapshot.get(FirestoreConstants.userid);
       users = snapshot.get(FirestoreConstants.users);
     } catch (e) {
       if (kDebugMode) {
@@ -134,7 +136,7 @@ class Content extends Equatable {
     return Content(
         id: snapshot.id,
         contentType: contentType,
-        user: user,
+        userid: userid,
         uploadTimestamp: uploadTimestamp,
         url: url,
         users: users);
@@ -143,25 +145,25 @@ class Content extends Equatable {
   Content copyWith({
     String? id,
     String? contentType,
-    String? user,
+    String? userid,
     String? uploadTimestamp,
   }) =>
       Content(
           id: id ?? this.id,
           contentType: contentType ?? this.contentType,
-          user: user ?? this.user,
+          userid: userid ?? this.userid,
           uploadTimestamp: uploadTimestamp ?? this.uploadTimestamp,
           url: url,
           users: users);
 
   Map<String, dynamic> toJson() => {
         FirestoreConstants.contentType: contentType,
-        FirestoreConstants.user: user,
+        FirestoreConstants.userid: userid,
         FirestoreConstants.uploadTimestamp: uploadTimestamp
       };
 
   @override
-  List<Object?> get props => [id, contentType, user, uploadTimestamp, url, users];
+  List<Object?> get props => [id, contentType, userid, uploadTimestamp, url, users];
 
   @override
   String toString() {

@@ -99,24 +99,26 @@ class DSUser extends Equatable {
   @override
   List<Object?> get props => [id, photoUrl, username, phoneNumber, aboutMe];
 
-  static DSUser getFromId(String id) {
+  static Future<DSUser> getFromUserReference(String id) async {
+    print("id sent : " + id);
     DSUser loading =
         DSUser.DSUserComplete(id: '', photoUrl: '', username: 'loading', phoneNumber: '', aboutMe: '', email: '');
 
-    FirebaseFirestore.instance
-        .collection('DSUsers')
-        // get only username, not collection name (ex : DSUsers/admin)
-        .doc(id.split('/')[1])
+    await FirebaseFirestore.instance
+        .collection('users')
+        // get only username, not collection name (ex : users/admin)
+        .doc(id)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
+      print("doc snap : " + documentSnapshot.id);
       if (documentSnapshot.exists) {
         print('Document data: ${documentSnapshot.data()}');
-        return DSUser.fromDocument(documentSnapshot);
+        loading = DSUser.fromDocument(documentSnapshot);
       } else {
         print('Document does not exist on the database');
-        return loading;
       }
     });
+    if (loading.username == 'loading') loading.username = "still loading";
     return loading;
   }
 }
