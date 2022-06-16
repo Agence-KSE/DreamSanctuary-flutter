@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:js';
 import 'dart:ui';
 
@@ -16,6 +17,7 @@ class Content extends Equatable {
   late final String uploadTimestamp;
   late final String url;
   late final String userid;
+  late final String username;
   late final List<dynamic> users;
 
   Content(
@@ -24,12 +26,14 @@ class Content extends Equatable {
       required String uploadTimestamp,
       required String url,
       required String userid,
+      required String username,
       required List<dynamic> users}) {
     this.id = id;
     this.contentType = contentType;
     this.uploadTimestamp = uploadTimestamp;
     this.url = url;
     this.userid = userid;
+    this.username = username;
     this.users = users;
   }
 
@@ -49,9 +53,7 @@ class Content extends Equatable {
     })));
   }
 
-  Future<Widget> buildContent(BuildContext context, bool blur) async {
-    DSUser author = await DSUser.getFromUserReference(this.userid);
-    // TODO solution ici ? https://stackoverflow.com/questions/28238161/how-to-make-an-asynchronous-dart-call-synchronous
+  Widget buildContent(BuildContext context, DSUser currentUser, bool blur) {
     // AVATAR - NAME
     // IMAGE
     // LIKE - FAV
@@ -95,16 +97,15 @@ class Content extends Equatable {
                     ),
                   ),*/
                   ListTile(
-                    textColor: Colors.pink,
+                    textColor: AppColors.cardHeading,
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(author.username),
-                        //Text(this.user.split('/')[1]),
+                        Text(this.username),
                         Text(this.uploadTimestamp),
                       ],
                     ),
-                    subtitle: Text(this.contentType),
+                    subtitle: Text(this.contentType, style: TextStyle(color: AppColors.cardParagraph)),
                   ),
                 ]),
           )),
@@ -120,6 +121,7 @@ class Content extends Equatable {
     String uploadTimestamp = "";
     String url = "";
     String userid = "";
+    String username = "";
     List<dynamic> users = [];
 
     try {
@@ -127,6 +129,7 @@ class Content extends Equatable {
       uploadTimestamp = snapshot.get(FirestoreConstants.uploadTimestamp);
       url = snapshot.get(FirestoreConstants.url);
       userid = snapshot.get(FirestoreConstants.userid);
+      username = snapshot.get(FirestoreConstants.username);
       users = snapshot.get(FirestoreConstants.users);
     } catch (e) {
       if (kDebugMode) {
@@ -137,6 +140,7 @@ class Content extends Equatable {
         id: snapshot.id,
         contentType: contentType,
         userid: userid,
+        username: username,
         uploadTimestamp: uploadTimestamp,
         url: url,
         users: users);
@@ -146,12 +150,14 @@ class Content extends Equatable {
     String? id,
     String? contentType,
     String? userid,
+    String? username,
     String? uploadTimestamp,
   }) =>
       Content(
           id: id ?? this.id,
           contentType: contentType ?? this.contentType,
           userid: userid ?? this.userid,
+          username: username ?? this.username,
           uploadTimestamp: uploadTimestamp ?? this.uploadTimestamp,
           url: url,
           users: users);
@@ -159,11 +165,12 @@ class Content extends Equatable {
   Map<String, dynamic> toJson() => {
         FirestoreConstants.contentType: contentType,
         FirestoreConstants.userid: userid,
+        FirestoreConstants.username: username,
         FirestoreConstants.uploadTimestamp: uploadTimestamp
       };
 
   @override
-  List<Object?> get props => [id, contentType, userid, uploadTimestamp, url, users];
+  List<Object?> get props => [id, contentType, userid, username, uploadTimestamp, url, users];
 
   @override
   String toString() {

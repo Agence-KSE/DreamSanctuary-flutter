@@ -29,6 +29,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int nbBuild = 0;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final ScrollController scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -84,10 +85,11 @@ class _HomeState extends State<Home> {
       automaticallyImplyLeading: false,
       title: Text('Welcome to Dream Sanctuary, ' + widget.currentUser.username + "!"),
       centerTitle: false,
+      /* left icon 
       leading: GestureDetector(
         onTap: () => _signOut(),
         child: const Icon(Icons.login_outlined),
-      ),
+      ),*/
       actions: [
         IconButton(
           icon: const Icon(Icons.message_sharp),
@@ -130,12 +132,13 @@ class _HomeState extends State<Home> {
                       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasData) {
                           if (snapshot.data!.docs.length > 0) {
-                            return ListView.separated(
+                            return ListView.builder(
+                              // separated : reloads content at scroll
                               shrinkWrap: true,
                               itemCount: snapshot.data!.docs.length,
                               itemBuilder: (context, index) => buildItem(context, snapshot.data?.docs[index]),
                               controller: scrollController,
-                              separatorBuilder: (BuildContext context, int index) => const Divider(),
+                              // separatorBuilder: (BuildContext context, int index) => const Divider(),
                             );
                           } else {
                             return const Center(
@@ -255,19 +258,20 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<Widget> buildItem(BuildContext context, DocumentSnapshot? documentSnapshot) async {
+  Widget buildItem(BuildContext context, DocumentSnapshot? documentSnapshot) {
+    this.nbBuild++;
     if (documentSnapshot != null) {
       print(" ---------- BUILDING CONTENT... ----------");
+      print(documentSnapshot.id);
       Content content = Content.fromDocument(documentSnapshot);
       print("current item : " + content.id);
-      print("users 0 : " + content.users.length.toString());
+      print("username : " + content.username);
       print("current user : " + widget.currentUser.username);
+      print("nb builds : " + this.nbBuild.toString());
 
       // if user not found in authorized users, let's blur that shit
-      Widget wid = await content.buildContent(this.context, !content.users.contains(widget.currentUser.id));
-      return wid;
-    } else {
-      return const SizedBox.shrink();
-    }
+      return content.buildContent(this.context, widget.currentUser, !content.users.contains(widget.currentUser.id));
+    } else
+      return Text("loading");
   }
 }
