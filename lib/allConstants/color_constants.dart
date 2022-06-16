@@ -12,4 +12,17 @@ class AppColors {
   static const Color burgundy = Color(0xFF880d1e);
   static const Color indyBlue = Color(0xFF414361);
   static const Color spaceCadet = Color(0xFF2a2d43);
+
+  static const Color background = Color(0xFFD8EEFE);
+  static const Color headline = Color(0xFF094067);
+  static const Color headlineSub = Color(0xFF5f6c7b);
+  static const Color cardBackground = Color(0xFFfffffe);
+  static const Color cardHeading = Color(0xFF094067);
+  static const Color cardParagraph = Color(0xFF5f6c7b);
+  static const Color strokeIcon = Color(0xFF094067);
+  static const Color iconMain = Color(0xFFfffffe);
+  static const Color highlight = Color(0xFF3da9fc);
+  static const Color secondary = Color(0xFF90b4ce);
+  static const Color tertiary = Color(0xFFef4565);
+  static const Color buttonBackground = Color(0xFFef4565);
 }

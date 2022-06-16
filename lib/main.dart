@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dreamsanctuary/allConstants/all_constants.dart';
 import 'package:dreamsanctuary/firebase_options.dart';
 import 'package:dreamsanctuary/providers/chat_page_provider.dart';
 import 'package:dreamsanctuary/providers/chat_provider.dart';
@@ -59,11 +60,15 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Dream Sanctuary',
           theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Color.fromARGB(255, 54, 79, 107),
-              foregroundColor: Color.fromARGB(255, 228, 249, 245),
-            ),
-          ),
+              appBarTheme: const AppBarTheme(
+                backgroundColor: AppColors.background,
+                foregroundColor: AppColors.cardHeading,
+                /*backgroundColor: Color.fromARGB(255, 54, 79, 107),
+              foregroundColor: Color.fromARGB(255, 228, 249, 245),*/
+              ),
+              cardTheme: const CardTheme(
+                color: AppColors.cardBackground,
+              )),
           //home: const DefaultList(),
           home: Login(),
         ));
