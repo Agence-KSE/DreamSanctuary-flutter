@@ -43,13 +43,13 @@ class Content extends Equatable {
     })));
   }
 
-  void _goToCreatorProfile(BuildContext context, Content content) async {
+  void _goToCreatorProfile(BuildContext context, Content content, DSUser currentUser) async {
     // get creator from content
     DSUser creator = await DSUser.getFromUserReference(content.userid);
     print("creator : " + creator.username);
 
     Navigator.of(context).push(MaterialPageRoute<void>(builder: ((context) {
-      return CreatorProfile().buildCreatorProfile(context, creator);
+      return CreatorProfile(creator: creator, currentUser: currentUser);
     })));
   }
 
@@ -61,7 +61,7 @@ class Content extends Equatable {
       child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
           child: InkWell(
-            onTap: () => _goToCreatorProfile(context, this),
+            onTap: () => _goToCreatorProfile(context, this, currentUser),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.start,
