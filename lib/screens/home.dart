@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dreamsanctuary/allWidgets/custom_app_bar.dart';
 import 'package:dreamsanctuary/models/content/content.dart';
 import 'package:dreamsanctuary/models/dsuser.dart';
 import 'package:dreamsanctuary/profile/profile_drawer.dart';
@@ -80,7 +81,7 @@ class _HomeState extends State<Home> {
     scrollController.addListener(scrollListener);
   }
 
-  PreferredSizeWidget buildAppBar() {
+  /*PreferredSizeWidget buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Text('Welcome to Dream Sanctuary, ' + widget.currentUser.username + "!"),
@@ -102,7 +103,7 @@ class _HomeState extends State<Home> {
             onPressed: () => _scaffoldKey.currentState!.openEndDrawer())
       ],
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +118,7 @@ class _HomeState extends State<Home> {
         endDrawer: Drawer(
           child: pfd.createProfileDrawer(),
         ),
-        appBar: buildAppBar(),
+        appBar: CustomAppBar().build(widget.currentUser, context),
         body: WillPopScope(
           onWillPop: onBackPress,
           child: Stack(
